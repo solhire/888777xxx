@@ -117,16 +117,16 @@ export const Navbar: React.FC = () => {
                  href="https://pump.fun/profile/zenthgg"
                  target="_blank"
                  rel="noreferrer"
-                 className="text-xs font-mono uppercase tracking-[0.3em] border border-z-violet-base/60 px-4 py-2 text-z-violet-base hover:bg-z-violet-base hover:text-black transition-all"
+                 className="text-[10px] font-display font-bold italic tracking-widest px-4 py-2 rounded-md bg-gradient-to-r from-z-violet-base to-z-violet-peak text-white shadow-[0_0_20px_rgba(180,108,255,0.4)] hover:shadow-[0_0_30px_rgba(180,108,255,0.8)] hover:scale-105 transition-all duration-300 border border-white/10"
                >
-                 BUY ON PUMPFUN
+                 BUY $ZENTH
                </a>
                <div className="relative" ref={userMenuRef}>
                <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={handleConnect}
-                    className={`min-w-[140px] transition-all duration-300 ${showUserMenu ? 'border-z-violet-base bg-z-violet-base/10' : ''}`}
+                    className={`min-w-[140px] transition-all duration-300 ${showUserMenu ? 'border-z-violet-base bg-z-violet-base/10' : ''} text-[10px] font-display font-bold italic tracking-widest px-4 py-2 border border-white/20 hover:border-z-violet-base/50 hover:bg-z-violet-base/10 ml-4`}
                >
                    {user ? (
                    <span className="flex items-center gap-2">
@@ -187,13 +187,6 @@ export const Navbar: React.FC = () => {
                  </div>
                </div>
 
-               {!user && (
-                  <Link to="/tournaments">
-                    <Button onClick={() => {}}>
-                    ENTER THE CLIMB
-                  </Button>
-                  </Link>
-               )}
             </div>
 
             {/* Mobile Toggle */}
