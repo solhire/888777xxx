@@ -51,7 +51,7 @@ export const Showcase: React.FC = () => {
   }, []);
 
   return (
-    <div className="pt-32 pb-20 min-h-screen max-w-7xl mx-auto px-4">
+    <div className="pt-48 pb-20 min-h-screen max-w-7xl mx-auto px-4">
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 opacity-0 animate-fade-in-up">
         <div>
           <h1 className="font-display font-black text-6xl text-white italic transform -skew-x-3">

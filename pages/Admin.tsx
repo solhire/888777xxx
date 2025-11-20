@@ -25,7 +25,7 @@ export const Admin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-40 px-4 max-w-4xl mx-auto">
+    <div className="min-h-screen pt-48 px-4 max-w-4xl mx-auto">
       <h1 className="text-4xl font-display font-bold text-white mb-8 italic">ADMIN CONSOLE</h1>
       
       <div className="bg-z-obsidian border border-z-steel-gray/20 p-8 rounded-lg">

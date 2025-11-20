@@ -138,7 +138,7 @@ export const Dashboard: React.FC = () => {
   const xpProgress = Math.min((user.xp / nextLevelXp) * 100, 100);
 
   return (
-    <div className="pt-32 pb-20 min-h-screen max-w-6xl mx-auto px-4">
+    <div className="pt-48 pb-20 min-h-screen max-w-6xl mx-auto px-4">
       <div className="grid md:grid-cols-3 gap-8">
         
         {/* Left Column: Profile & Wallet */}

@@ -10,7 +10,7 @@ export const Home: React.FC = () => {
   const isConnected = isAuthenticated && user;
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-40">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         {/* Abstract BG */}

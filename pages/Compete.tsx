@@ -58,7 +58,7 @@ export const Compete: React.FC = () => {
   }, []);
 
   return (
-    <div className="pt-32 pb-20 min-h-screen max-w-7xl mx-auto px-4">
+    <div className="pt-48 pb-20 min-h-screen max-w-7xl mx-auto px-4">
       <header className="mb-16 opacity-0 animate-fade-in-up">
         <h1 className="font-display font-black text-6xl text-white italic transform -skew-x-3 mb-4">
           ACTIVE CHALLENGES

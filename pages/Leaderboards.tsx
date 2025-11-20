@@ -22,7 +22,7 @@ export const Leaderboards: React.FC = () => {
   }, []);
 
   return (
-    <div className="pt-32 pb-20 min-h-screen max-w-5xl mx-auto px-4">
+    <div className="pt-48 pb-20 min-h-screen max-w-5xl mx-auto px-4">
       <div className="flex justify-between items-end mb-12 opacity-0 animate-fade-in-up">
         <h1 className="font-display font-black text-5xl md:text-7xl text-white italic transform -skew-x-3">
           SEASON 1 RANKINGS

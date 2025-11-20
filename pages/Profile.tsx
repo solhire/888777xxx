@@ -22,7 +22,7 @@ export const Profile: React.FC = () => {
   }
 
   return (
-    <div className="pt-32 pb-20 min-h-screen max-w-4xl mx-auto px-4">
+    <div className="pt-48 pb-20 min-h-screen max-w-4xl mx-auto px-4">
       <header className="mb-10">
         <p className="text-xs font-mono text-z-violet-base uppercase tracking-[0.3em]">Control Room</p>
         <h1 className="font-display font-black text-5xl text-white italic transform -skew-x-3 mt-2">
