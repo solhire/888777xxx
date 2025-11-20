@@ -1,0 +1,204 @@
+import React, { useState } from 'react';
+import { Button } from '../components/Button';
+import { useUser } from '../context/UserContext';
+import { useToast } from '../context/ToastContext';
+import { signAuthenticationMessage } from '../services/walletService';
+
+interface Proposal {
+  id: string;
+  title: string;
+  description: string;
+  currentVotes: number;
+  percentage: number;
+  category: 'INTEGRATION' | 'FEATURE';
+}
+
+const initialProposals: Proposal[] = [
+  {
+    id: 'game-rl',
+    title: 'Rocket League',
+    description: 'Vehicle soccer integration. 1v1 and 2v2 formats supported.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'INTEGRATION',
+  },
+  {
+    id: 'game-apex',
+    title: 'Apex Legends',
+    description: 'Battle Royale kill-race format. Trios and Duos.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'INTEGRATION',
+  },
+  {
+    id: 'game-sf6',
+    title: 'Street Fighter 6',
+    description: 'FGC support with 1v1 lobbies. Best of 5 format.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'INTEGRATION',
+  },
+  {
+    id: 'game-ow2',
+    title: 'Overwatch 2',
+    description: '5v5 Team Tactical integration with role queue.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'INTEGRATION',
+  },
+  {
+    id: 'feat-clans',
+    title: 'Clan System',
+    description: 'Persistent teams, clan tags, and clan vs. clan wagers.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'FEATURE',
+  },
+  {
+    id: 'feat-mobile',
+    title: 'Mobile Companion',
+    description: 'iOS/Android app for match notifications and wallet management.',
+    currentVotes: 0,
+    percentage: 0,
+    category: 'FEATURE',
+  },
+];
+
+const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isVoting: boolean }> = ({ proposal, onVote, isVoting }) => (
+  <div className="group relative bg-z-obsidian/40 border border-z-steel-gray/20 p-6 overflow-hidden hover:border-z-violet-base/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(106,0,255,0.15)] hover:-translate-y-1 backdrop-blur-sm flex flex-col h-full">
+    {/* Holographic sheen effect */}
+    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+    
+    <div className="flex justify-between items-start mb-4 relative z-10">
+      <span className="text-[10px] font-mono uppercase tracking-widest text-z-violet-base border border-z-violet-base/30 px-2 py-1 rounded bg-z-violet-base/5">
+        {proposal.category}
+      </span>
+      <span className="text-z-steel-gray font-mono text-xs">
+        {proposal.currentVotes.toLocaleString()} VOTES
+      </span>
+    </div>
+
+    <h3 className="text-2xl font-display font-bold text-white italic mb-2 group-hover:text-z-violet-peak transition-colors">
+      {proposal.title}
+    </h3>
+    
+    <p className="text-z-steel-gray font-mono text-sm mb-6 flex-grow leading-relaxed">
+      {proposal.description}
+    </p>
+
+    <div className="relative z-10 mt-auto space-y-4">
+      {/* Progress Bar */}
+      <div className="w-full bg-z-steel-gray/10 h-1 rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-gradient-to-r from-z-violet-base to-z-violet-peak transition-all duration-1000 ease-out group-hover:shadow-[0_0_10px_#b46cff]"
+          style={{ width: `${proposal.percentage}%` }}
+        />
+      </div>
+      <div className="flex justify-between text-xs font-mono text-z-steel-gray">
+        <span>CONSENSUS</span>
+        <span>{proposal.percentage}%</span>
+      </div>
+
+      <Button 
+        onClick={() => onVote(proposal.id)}
+        variant="outline" 
+        className="w-full group-hover:bg-z-violet-base group-hover:text-white group-hover:border-transparent transition-all"
+        disabled={isVoting}
+      >
+        {isVoting ? 'VERIFYING...' : 'CAST VOTE'}
+      </Button>
+    </div>
+  </div>
+);
+
+export const Vote: React.FC = () => {
+  const { user, login } = useUser();
+  const { pushToast } = useToast();
+  const [proposals, setProposals] = useState(initialProposals);
+  const [votingId, setVotingId] = useState<string | null>(null);
+
+  const handleVote = async (id: string) => {
+    if (!user) {
+      login();
+      return;
+    }
+
+    setVotingId(id);
+
+    try {
+      // Simulate signature request
+      const message = `Vote for proposal ${id} with wallet ${user.walletAddress}`;
+      const result = await signAuthenticationMessage(message);
+
+      if (result) {
+        // Optimistic update
+        setProposals(prev => prev.map(p => {
+          if (p.id === id) {
+            return { ...p, currentVotes: p.currentVotes + 1 }; // Simplified logic
+          }
+          return p;
+        }));
+
+        pushToast({ message: 'Consensus Verified. Vote Logged.', variant: 'success' });
+      }
+    } catch (error) {
+      console.error(error);
+      pushToast({ message: 'Vote cancelled or failed.', variant: 'error' });
+    } finally {
+      setVotingId(null);
+    }
+  };
+
+  return (
+    <div className="pt-48 pb-20 min-h-screen max-w-7xl mx-auto px-4">
+      <header className="mb-16 opacity-0 animate-fade-in-up">
+        <h1 className="font-display font-black text-6xl md:text-7xl text-white italic transform -skew-x-3 mb-4">
+          PROTOCOL GOVERNANCE
+        </h1>
+        <p className="text-z-onyx font-mono max-w-xl border-l-2 border-z-violet-base pl-4">
+          Direct the future of ZENTH. Vote on integrations and features using your staked influence.
+        </p>
+      </header>
+
+      <div className="space-y-16">
+        {/* Section 1: Integrations */}
+        <section className="opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+            <div className="flex items-center gap-4 mb-8">
+                <div className="h-px flex-grow bg-gradient-to-r from-z-violet-base/50 to-transparent"></div>
+                <h2 className="font-display font-bold text-2xl text-white italic uppercase tracking-wider">Sector Expansion</h2>
+                <div className="h-px flex-grow bg-gradient-to-l from-z-violet-base/50 to-transparent"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {proposals.filter(p => p.category === 'INTEGRATION').map((p, i) => (
+                    <VoteCard 
+                        key={p.id} 
+                        proposal={p} 
+                        onVote={handleVote} 
+                        isVoting={votingId === p.id}
+                    />
+                ))}
+            </div>
+        </section>
+
+        {/* Section 2: Features */}
+        <section className="opacity-0 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+            <div className="flex items-center gap-4 mb-8">
+                <div className="h-px flex-grow bg-gradient-to-r from-z-violet-base/50 to-transparent"></div>
+                <h2 className="font-display font-bold text-2xl text-white italic uppercase tracking-wider">System Upgrades</h2>
+                <div className="h-px flex-grow bg-gradient-to-l from-z-violet-base/50 to-transparent"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {proposals.filter(p => p.category === 'FEATURE').map((p, i) => (
+                    <VoteCard 
+                        key={p.id} 
+                        proposal={p} 
+                        onVote={handleVote} 
+                        isVoting={votingId === p.id}
+                    />
+                ))}
+            </div>
+        </section>
+      </div>
+    </div>
+  );
+};

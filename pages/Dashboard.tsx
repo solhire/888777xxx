@@ -58,7 +58,7 @@ export const Dashboard: React.FC = () => {
     try {
       const message = `Sign this message to claim reward ${id}`;
       const authResult = await signAuthenticationMessage(message);
-      
+    
       if (authResult) {
         // Send signature to backend for verification and claim processing
         const sigHex = toHexString(authResult.signature);
@@ -70,7 +70,7 @@ export const Dashboard: React.FC = () => {
         const newBalance = await getWalletBalance(user.walletAddress);
         setBalance(newBalance);
         alert("Claim request sent successfully.");
-      } else {
+    } else {
         alert("Authentication Failed or Cancelled");
       }
     } catch (error) {
@@ -99,7 +99,7 @@ export const Dashboard: React.FC = () => {
                 if (authResult) {
                     setHolderRewardClaimed(true);
                     alert("Holder reward claimed successfully!");
-                }
+    }
              } else {
                  alert("No $ZENTH tokens found in wallet.");
              }
@@ -242,37 +242,37 @@ export const Dashboard: React.FC = () => {
                <p className="text-z-onyx font-mono">No rewards currently available.</p>
              </div>
           ) : (
-            <div className="space-y-4">
-              {rewards.map((reward, i) => (
-                <div 
-                  key={reward.id} 
-                  className="bg-z-obsidian/50 border border-z-steel-gray/20 p-6 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-0 animate-fade-in-up hover:bg-z-obsidian transition-colors"
-                  style={{ animationDelay: `${400 + (i * 100)}ms` }}
-                >
-                  <div>
-                    <h4 className="text-white font-bold text-lg italic">{reward.title}</h4>
-                    <p className="text-z-steel-gray text-sm font-mono">{reward.timestamp}</p>
-                  </div>
-                  <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
-                    <div className="text-xl font-display font-bold text-z-violet-peak">{reward.amountSol} SOL</div>
-                    {reward.status === 'available' ? (
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleClaim(reward.id)}
-                        disabled={claimingId === reward.id}
-                        className="min-w-[100px]"
-                      >
-                        {claimingId === reward.id ? 'SIGNING...' : 'CLAIM'}
-                      </Button>
-                    ) : (
-                      <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
-                        CLAIMED
-                      </span>
-                    )}
-                  </div>
+          <div className="space-y-4">
+            {rewards.map((reward, i) => (
+              <div 
+                key={reward.id} 
+                className="bg-z-obsidian/50 border border-z-steel-gray/20 p-6 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-0 animate-fade-in-up hover:bg-z-obsidian transition-colors"
+                style={{ animationDelay: `${400 + (i * 100)}ms` }}
+              >
+                <div>
+                  <h4 className="text-white font-bold text-lg italic">{reward.title}</h4>
+                  <p className="text-z-steel-gray text-sm font-mono">{reward.timestamp}</p>
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
+                  <div className="text-xl font-display font-bold text-z-violet-peak">{reward.amountSol} SOL</div>
+                  {reward.status === 'available' ? (
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleClaim(reward.id)}
+                      disabled={claimingId === reward.id}
+                      className="min-w-[100px]"
+                    >
+                      {claimingId === reward.id ? 'SIGNING...' : 'CLAIM'}
+                    </Button>
+                  ) : (
+                    <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
+                      CLAIMED
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
           )}
         </div>
 

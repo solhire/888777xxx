@@ -105,6 +105,7 @@ export const Navbar: React.FC = () => {
             <div className="hidden lg:flex items-center space-x-1">
               <NavLink to="/tournaments" label="Tournaments" active={location.pathname.startsWith('/tournaments') || location.pathname === '/compete'} />
               <NavLink to="/leaderboards" label="Leaderboards" active={location.pathname === '/leaderboards'} />
+              <NavLink to="/vote" label="Vote" active={location.pathname === '/vote'} />
               <NavLink to="/showcase" label="Showcase" active={location.pathname === '/showcase'} />
               <NavLink to="/faq" label="FAQ" active={location.pathname === '/faq'} />
               <NavLink to="/dashboard" label="Dashboard" active={location.pathname === '/dashboard'} />
@@ -222,6 +223,7 @@ export const Navbar: React.FC = () => {
             <div className="flex flex-col gap-4 mt-8">
                <Link to="/tournaments" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Tournaments</Link>
                <Link to="/leaderboards" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Leaderboards</Link>
+               <Link to="/vote" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Vote</Link>
                <Link to="/showcase" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Showcase</Link>
                <Link to="/faq" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>FAQ</Link>
                <Link to="/dashboard" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Dashboard</Link>

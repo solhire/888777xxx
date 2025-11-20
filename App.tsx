@@ -17,6 +17,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { FAQ } from './pages/FAQ';
 import { Profile } from './pages/Profile';
 import { Admin } from './pages/Admin';
+import { Vote } from './pages/Vote';
 import { AdminProvider } from './context/AdminContext';
 
 const Footer: React.FC = () => (
@@ -58,6 +59,7 @@ const App: React.FC = () => {
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/vote" element={<Vote />} />
             </Routes>
           </div>
           <Footer />
