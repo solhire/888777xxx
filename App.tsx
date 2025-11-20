@@ -43,7 +43,6 @@ const App: React.FC = () => {
         <ScrollToTop />
         <div className="bg-black min-h-screen flex flex-col text-white font-sans selection:bg-z-violet-base selection:text-white">
           <Navbar />
-          <AdminBanner />
           <ToastStack />
           <div className="flex-grow pb-16 lg:pb-0">
             <Routes>

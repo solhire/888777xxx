@@ -5,6 +5,7 @@ import { Button } from './Button';
 import { useUser } from '../context/UserContext';
 import { UsernameModal } from './UsernameModal';
 import { useToast } from '../context/ToastContext';
+import { AdminBanner } from './AdminBanner';
 
 const NavLink: React.FC<{ to: string; label: string; active: boolean }> = ({ to, label, active }) => (
   <Link to={to} className="relative group px-4 py-2">
@@ -86,126 +87,129 @@ export const Navbar: React.FC = () => {
         }}
       />
 
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-t-[3px] border-z-violet-base ${scrolled ? 'bg-z-obsidian/95 backdrop-blur-md py-2 shadow-2xl' : 'bg-transparent py-6'}`}>
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          
-          {/* Left: Brand */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 text-z-violet-base group-hover:text-z-violet-peak transition-colors duration-300 transform -skew-x-6 group-hover:rotate-12 transition-transform">
-               <ZShard />
+      <header className="fixed top-0 left-0 w-full z-50 flex flex-col font-sans">
+        <nav className={`w-full transition-all duration-500 border-t-[3px] border-z-violet-base ${scrolled ? 'bg-z-obsidian/95 backdrop-blur-md py-2 shadow-2xl' : 'bg-transparent py-6'}`}>
+          <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+            
+            {/* Left: Brand */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-8 h-8 text-z-violet-base group-hover:text-z-violet-peak transition-colors duration-300 transform -skew-x-6 group-hover:rotate-12 transition-transform">
+                 <ZShard />
+              </div>
+              <span className="font-display font-black text-2xl tracking-tighter italic text-white transform -skew-x-6">
+                ZENTH
+              </span>
+            </Link>
+
+            {/* Center: Links (Desktop) */}
+            <div className="hidden lg:flex items-center space-x-1">
+              <NavLink to="/tournaments" label="Tournaments" active={location.pathname.startsWith('/tournaments') || location.pathname === '/compete'} />
+              <NavLink to="/leaderboards" label="Leaderboards" active={location.pathname === '/leaderboards'} />
+              <NavLink to="/showcase" label="Showcase" active={location.pathname === '/showcase'} />
+              <NavLink to="/faq" label="FAQ" active={location.pathname === '/faq'} />
+              <NavLink to="/dashboard" label="Dashboard" active={location.pathname === '/dashboard'} />
             </div>
-            <span className="font-display font-black text-2xl tracking-tighter italic text-white transform -skew-x-6">
-              ZENTH
-            </span>
-          </Link>
 
-          {/* Center: Links (Desktop) */}
-          <div className="hidden lg:flex items-center space-x-1">
-            <NavLink to="/tournaments" label="Tournaments" active={location.pathname.startsWith('/tournaments') || location.pathname === '/compete'} />
-            <NavLink to="/leaderboards" label="Leaderboards" active={location.pathname === '/leaderboards'} />
-            <NavLink to="/showcase" label="Showcase" active={location.pathname === '/showcase'} />
-            <NavLink to="/faq" label="FAQ" active={location.pathname === '/faq'} />
-            <NavLink to="/dashboard" label="Dashboard" active={location.pathname === '/dashboard'} />
-          </div>
-
-          {/* Right: Actions (Desktop) */}
-          <div className="hidden lg:flex items-center gap-4">
-             <a
-               href="https://pump.fun/profile/zenthgg"
-               target="_blank"
-               rel="noreferrer"
-               className="text-xs font-mono uppercase tracking-[0.3em] border border-z-violet-base/60 px-4 py-2 text-z-violet-base hover:bg-z-violet-base hover:text-black transition-all"
-             >
-               BUY ON PUMPFUN
-             </a>
-             <div className="relative" ref={userMenuRef}>
-             <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleConnect}
-                  className={`min-w-[140px] transition-all duration-300 ${showUserMenu ? 'border-z-violet-base bg-z-violet-base/10' : ''}`}
-             >
-                 {user ? (
-                 <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]" />
-                      {user.username}
-                 </span>
-               ) : (
-                  <span className="flex items-center gap-2">
-                    <span className="w-3 h-3 bg-z-steel-gray/50 rounded-full" />
-                    CONNECT
-                  </span>
-               )}
-             </Button>
-
-               {/* User Dropdown Menu with Animations */}
-               <div 
-                 className={`absolute top-full right-0 mt-2 w-56 bg-z-obsidian border border-z-steel-gray/20 shadow-[0_0_30px_rgba(0,0,0,0.9)] z-50 transform transition-all duration-300 origin-top-right backdrop-blur-xl
-                 ${showUserMenu ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}
-                 `}
+            {/* Right: Actions (Desktop) */}
+            <div className="hidden lg:flex items-center gap-4">
+               <a
+                 href="https://pump.fun/profile/zenthgg"
+                 target="_blank"
+                 rel="noreferrer"
+                 className="text-xs font-mono uppercase tracking-[0.3em] border border-z-violet-base/60 px-4 py-2 text-z-violet-base hover:bg-z-violet-base hover:text-black transition-all"
                >
-                 {user && (
-                   <>
-                    <div className="p-4 border-b border-z-steel-gray/10 bg-white/5">
-                      <p className="text-[10px] text-z-violet-base font-bold uppercase tracking-widest mb-1">OPERATOR ID</p>
-                      <p className="text-white font-bold font-display italic tracking-wide text-lg">{user.username}</p>
-                      <p className="text-z-steel-gray text-xs font-mono truncate mt-1 opacity-60">{user.walletAddress}</p>
-                    </div>
-                    <div className="py-2">
-                      <Link 
-                        to="/profile" 
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-z-onyx hover:bg-z-violet-base/10 hover:text-white font-mono transition-all border-l-2 border-transparent hover:border-z-violet-base group"
-                        onClick={() => setShowUserMenu(false)}
-                      >
-                        <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">*</span>
-                        PROFILE
-                      </Link>
-                      <Link 
-                        to="/dashboard" 
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-z-onyx hover:bg-z-violet-base/10 hover:text-white font-mono transition-all border-l-2 border-transparent hover:border-z-violet-base group"
-                        onClick={() => setShowUserMenu(false)}
-                      >
-                        <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">⬡</span>
-                        DASHBOARD
-                      </Link>
-                      <button 
-                        className="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 font-mono transition-all border-l-2 border-transparent hover:border-red-500 group"
-                        onClick={async () => {
-                          await logout();
-                          setShowUserMenu(false);
-                        }}
-                      >
-                        <span className="text-red-500/50 group-hover:text-red-500 transition-colors">✕</span>
-                        DISCONNECT
-                      </button>
-                    </div>
-                   </>
+                 BUY ON PUMPFUN
+               </a>
+               <div className="relative" ref={userMenuRef}>
+               <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleConnect}
+                    className={`min-w-[140px] transition-all duration-300 ${showUserMenu ? 'border-z-violet-base bg-z-violet-base/10' : ''}`}
+               >
+                   {user ? (
+                   <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]" />
+                        {user.username}
+                   </span>
+                 ) : (
+                    <span className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-z-steel-gray/50 rounded-full" />
+                      CONNECT
+                    </span>
                  )}
+               </Button>
+
+                 {/* User Dropdown Menu with Animations */}
+                 <div 
+                   className={`absolute top-full right-0 mt-2 w-56 bg-z-obsidian border border-z-steel-gray/20 shadow-[0_0_30px_rgba(0,0,0,0.9)] z-50 transform transition-all duration-300 origin-top-right backdrop-blur-xl
+                   ${showUserMenu ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}
+                   `}
+                 >
+                   {user && (
+                     <>
+                      <div className="p-4 border-b border-z-steel-gray/10 bg-white/5">
+                        <p className="text-[10px] text-z-violet-base font-bold uppercase tracking-widest mb-1">OPERATOR ID</p>
+                        <p className="text-white font-bold font-display italic tracking-wide text-lg">{user.username}</p>
+                        <p className="text-z-steel-gray text-xs font-mono truncate mt-1 opacity-60">{user.walletAddress}</p>
+                      </div>
+                      <div className="py-2">
+                        <Link 
+                          to="/profile" 
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-z-onyx hover:bg-z-violet-base/10 hover:text-white font-mono transition-all border-l-2 border-transparent hover:border-z-violet-base group"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">*</span>
+                          PROFILE
+                        </Link>
+                        <Link 
+                          to="/dashboard" 
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-z-onyx hover:bg-z-violet-base/10 hover:text-white font-mono transition-all border-l-2 border-transparent hover:border-z-violet-base group"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">⬡</span>
+                          DASHBOARD
+                        </Link>
+                        <button 
+                          className="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 font-mono transition-all border-l-2 border-transparent hover:border-red-500 group"
+                          onClick={async () => {
+                            await logout();
+                            setShowUserMenu(false);
+                          }}
+                        >
+                          <span className="text-red-500/50 group-hover:text-red-500 transition-colors">✕</span>
+                          DISCONNECT
+                        </button>
+                      </div>
+                     </>
+                   )}
+                 </div>
                </div>
-             </div>
 
-             {!user && (
-                <Link to="/tournaments">
-                  <Button onClick={() => {}}>
-                  ENTER THE CLIMB
-                </Button>
-                </Link>
-             )}
-          </div>
-
-          {/* Mobile Toggle */}
-          <button 
-            className="lg:hidden text-white transform -skew-x-6 border border-z-steel-gray p-2 hover:bg-z-steel-gray/20 transition-colors"
-            onClick={() => setMobileOpen(true)}
-          >
-            <div className="space-y-1.5">
-              <div className="w-6 h-0.5 bg-current transition-all"></div>
-              <div className="w-4 h-0.5 bg-current ml-auto transition-all"></div>
-              <div className="w-6 h-0.5 bg-current transition-all"></div>
+               {!user && (
+                  <Link to="/tournaments">
+                    <Button onClick={() => {}}>
+                    ENTER THE CLIMB
+                  </Button>
+                  </Link>
+               )}
             </div>
-          </button>
-        </div>
-      </nav>
+
+            {/* Mobile Toggle */}
+            <button 
+              className="lg:hidden text-white transform -skew-x-6 border border-z-steel-gray p-2 hover:bg-z-steel-gray/20 transition-colors"
+              onClick={() => setMobileOpen(true)}
+            >
+              <div className="space-y-1.5">
+                <div className="w-6 h-0.5 bg-current transition-all"></div>
+                <div className="w-4 h-0.5 bg-current ml-auto transition-all"></div>
+                <div className="w-6 h-0.5 bg-current transition-all"></div>
+              </div>
+            </button>
+          </div>
+        </nav>
+        <AdminBanner />
+      </header>
 
       {/* Mobile Menu Slide-out */}
       {mobileOpen && (
