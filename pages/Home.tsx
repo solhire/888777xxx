@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { NexilMark } from '../components/NexilMark';
+import { ZShard } from '../components/NexilMark';
 import { TournamentCountdown } from '../components/TournamentCountdown';
 import { useUser } from '../context/UserContext';
 import '../styles/howItWorks.css';
@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
           <div className="inline-block mb-6 animate-fade-in-up">
-             <NexilMark className="w-16 h-16 text-white mx-auto drop-shadow-[0_0_25px_rgba(79,44,255,0.45)]" />
+             <ZShard className="w-16 h-16 text-z-violet-peak mx-auto drop-shadow-[0_0_10px_rgba(180,108,255,0.5)]" />
           </div>
           <h1 className="font-display font-black text-6xl md:text-8xl lg:text-9xl uppercase italic leading-[0.9] text-white tracking-tighter transform -skew-x-3 mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
             Ascend To<br />
