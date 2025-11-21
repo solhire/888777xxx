@@ -8,12 +8,24 @@ export const Admin: React.FC = () => {
   const { user } = useUser();
   const [newCA, setNewCA] = useState(contractAddress);
 
-  if (!user || !isAdmin) {
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-center px-4 pt-32">
+        <div className="max-w-md">
+            <h1 className="text-4xl font-display font-bold text-z-violet-peak mb-4">ADMIN CONSOLE</h1>
+            <p className="text-z-steel-gray font-mono mb-4">Please connect your wallet to access the admin console.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center px-4 pt-32">
         <div className="max-w-md">
             <h1 className="text-4xl font-display font-bold text-red-500 mb-4">UNAUTHORIZED</h1>
             <p className="text-z-steel-gray font-mono">You do not have permission to access this node.</p>
+            <p className="text-z-steel-gray/70 font-mono text-xs mt-2">Connected wallet: {user.walletAddress}</p>
         </div>
       </div>
     );
