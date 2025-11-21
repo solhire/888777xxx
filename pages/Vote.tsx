@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
+import { VotingCountdown, useVotingOpen } from '../components/VotingCountdown';
 import { useUser } from '../context/UserContext';
 import { useToast } from '../context/ToastContext';
 import { signAuthenticationMessage } from '../services/walletService';
@@ -65,7 +66,7 @@ const initialProposals: Proposal[] = [
   },
 ];
 
-const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isVoting: boolean; hasVoted: boolean }> = ({ proposal, onVote, isVoting, hasVoted }) => (
+const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isVoting: boolean; hasVoted: boolean; isVotingOpen: boolean }> = ({ proposal, onVote, isVoting, hasVoted, isVotingOpen }) => (
   <div className="group relative bg-z-obsidian/40 border border-z-steel-gray/20 p-6 overflow-hidden hover:border-z-violet-base/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(106,0,255,0.15)] hover:-translate-y-1 backdrop-blur-sm flex flex-col h-full">
     {/* Holographic sheen effect */}
     <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -104,9 +105,9 @@ const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isV
         onClick={() => onVote(proposal.id)}
         variant="outline" 
         className="w-full group-hover:bg-z-violet-base group-hover:text-white group-hover:border-transparent transition-all"
-        disabled={isVoting || hasVoted}
+        disabled={isVoting || hasVoted || !isVotingOpen}
       >
-        {isVoting ? 'VERIFYING...' : hasVoted ? 'VOTE CAST' : 'CAST VOTE'}
+        {isVoting ? 'VERIFYING...' : hasVoted ? 'VOTE CAST' : !isVotingOpen ? 'VOTING CLOSED' : 'CAST VOTE'}
       </Button>
     </div>
   </div>
@@ -118,6 +119,7 @@ export const Vote: React.FC = () => {
   const [proposals, setProposals] = useState(initialProposals);
   const [votingId, setVotingId] = useState<string | null>(null);
   const [userVotedProposals, setUserVotedProposals] = useState<Set<string>>(new Set());
+  const isVotingOpen = useVotingOpen();
 
   // Load votes on mount
   useEffect(() => {
@@ -154,6 +156,12 @@ export const Vote: React.FC = () => {
   const handleVote = async (id: string) => {
     if (!user) {
       login();
+      return;
+    }
+
+    // Check if voting is open
+    if (!isVotingOpen) {
+      pushToast({ message: 'Voting opens on Friday, November 21, 2025 at 2:00 PM EST.', variant: 'error' });
       return;
     }
 
@@ -207,6 +215,11 @@ export const Vote: React.FC = () => {
           Direct the future of ZENTH. Vote on integrations and features using your staked influence.
         </p>
       </header>
+
+      {/* Voting Countdown */}
+      <div className="mb-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+        <VotingCountdown />
+      </div>
 
       {/* Voting Info Banner */}
       <div className="mb-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
@@ -275,6 +288,7 @@ export const Vote: React.FC = () => {
                         onVote={handleVote} 
                         isVoting={votingId === p.id}
                         hasVoted={userVotedProposals.has(p.id)}
+                        isVotingOpen={isVotingOpen}
                     />
                 ))}
             </div>
@@ -295,6 +309,7 @@ export const Vote: React.FC = () => {
                         onVote={handleVote} 
                         isVoting={votingId === p.id}
                         hasVoted={userVotedProposals.has(p.id)}
+                        isVotingOpen={isVotingOpen}
                     />
                 ))}
             </div>

@@ -21,7 +21,7 @@ To test the wallet features, you must have the Phantom Wallet extension installe
 
 ## Architecture
 - **Styling**: Tailwind CSS (configured via script injection in index.html for portability).
-- **Router**: HashRouter used for simple static hosting compatibility.
+- **Router**: BrowserRouter used for clean URLs without hash (#).
 - **Services**: Mock services located in `/services` folder.
 
 ## Solana RPC Configuration
