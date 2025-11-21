@@ -26,7 +26,7 @@ To test the wallet features, you must have the Phantom Wallet extension installe
 
 ## Solana RPC Configuration
 
-The app uses Solana RPC endpoints to fetch wallet balances. By default, it uses `devnet` for development.
+The app uses Solana RPC endpoints for blockchain interactions. By default, it uses `devnet` for development.
 
 ### Free RPC Endpoints
 

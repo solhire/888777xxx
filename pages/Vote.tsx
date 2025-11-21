@@ -208,6 +208,57 @@ export const Vote: React.FC = () => {
         </p>
       </header>
 
+      {/* Voting Info Banner */}
+      <div className="mb-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+        <div className={`bg-gradient-to-r from-z-violet-base/20 via-z-violet-peak/20 to-z-violet-base/20 border ${userVotedProposals.size > 0 ? 'border-z-violet-peak/50' : 'border-z-violet-base/30'} p-6 rounded-lg backdrop-blur-sm`}>
+          <div className="flex items-start gap-4">
+            <div className={`flex-shrink-0 w-6 h-6 bg-z-violet-base/30 rounded-full flex items-center justify-center border ${userVotedProposals.size > 0 ? 'border-z-violet-peak/70' : 'border-z-violet-base/50'}`}>
+              {userVotedProposals.size > 0 ? (
+                <svg className="w-4 h-4 text-z-violet-peak" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 text-z-violet-peak" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1">
+              <h3 className="text-z-violet-peak font-display font-bold text-lg italic mb-2">
+                {userVotedProposals.size > 0 ? 'VOTE CONFIRMED' : 'VOTING INFORMATION'}
+              </h3>
+              <div className="space-y-2 text-z-steel-gray font-mono text-sm">
+                {userVotedProposals.size > 0 ? (
+                  <>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">✓</span> Your vote has been saved and verified on-chain.
+                    </p>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">•</span> Duplicate votes from the same wallet will not be logged. Your first vote is final.
+                    </p>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Friday, November 21, 2025 at 2:00 PM EST</span>, when tournaments launch.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">•</span> Each wallet address can only vote once per proposal. Your vote will be saved and verified on-chain.
+                    </p>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">•</span> Duplicate votes from the same wallet will not be logged. Your first vote is final.
+                    </p>
+                    <p>
+                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Friday, November 21, 2025 at 2:00 PM EST</span>, when tournaments launch.
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="space-y-16">
         {/* Section 1: Integrations */}
         <section className="opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { signAuthenticationMessage, getWalletBalance } from '../services/walletService';
+import { RewardClaimModal } from '../components/RewardClaimModal';
+import { signAuthenticationMessage } from '../services/walletService';
 import { api } from '../services/api';
 import { RewardClaim } from '../types';
 import { useUser } from '../context/UserContext';
@@ -19,19 +20,33 @@ const ZENTH_TOKEN_ADDRESS = "TokenAddressToByProvidedByUser";
 
 export const Dashboard: React.FC = () => {
   const { user, isAuthenticated, login, isLoading: isAuthLoading } = useUser();
-  const [balance, setBalance] = useState<number>(0);
   const [rewards, setRewards] = useState<RewardClaim[]>([]);
   const [claimingId, setClaimingId] = useState<string | null>(null);
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [isCheckingHoldings, setIsCheckingHoldings] = useState(false);
   const [holderRewardClaimed, setHolderRewardClaimed] = useState(false);
+  
+  // Reward claim modal state
+  const [claimModal, setClaimModal] = useState<{
+    isOpen: boolean;
+    rewardId: string | null;
+    rewardTitle: string;
+    rewardAmount: string;
+    status: 'pending' | 'signing' | 'success' | 'error';
+    errorMessage?: string;
+  }>({
+    isOpen: false,
+    rewardId: null,
+    rewardTitle: '',
+    rewardAmount: '',
+    status: 'pending',
+  });
 
   useEffect(() => {
     if (user && user.walletAddress) {
       loadData(user.walletAddress);
     } else {
       // Reset data if user logs out
-      setBalance(0);
       setRewards([]);
     }
   }, [user]);
@@ -39,12 +54,8 @@ export const Dashboard: React.FC = () => {
   const loadData = async (walletAddress: string) => {
     setIsDataLoading(true);
     try {
-      const [rewardsData, balanceData] = await Promise.all([
-        api.getRewards(walletAddress),
-        getWalletBalance(walletAddress)
-      ]);
+      const rewardsData = await api.getRewards(walletAddress);
       setRewards(rewardsData);
-      setBalance(balanceData);
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
     } finally {
@@ -52,31 +63,55 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const handleClaim = async (id: string) => {
-    if (!user?.walletAddress) return;
-    setClaimingId(id);
+  const openClaimModal = (id: string) => {
+    const reward = rewards.find(r => r.id === id);
+    if (!reward) return;
+    
+    setClaimModal({
+      isOpen: true,
+      rewardId: id,
+      rewardTitle: reward.title,
+      rewardAmount: `${reward.amountSol} SOL`,
+      status: 'pending',
+    });
+  };
+
+  const handleClaim = async () => {
+    if (!user?.walletAddress || !claimModal.rewardId) return;
+    
+    const rewardId = claimModal.rewardId;
+    setClaimingId(rewardId);
     
     try {
-      const message = `Sign this message to claim reward ${id}`;
+      setClaimModal(prev => ({ ...prev, status: 'signing' }));
+      
+      const message = `Sign this message to claim reward ${rewardId}`;
       const authResult = await signAuthenticationMessage(message);
     
       if (authResult) {
         // Send signature to backend for verification and claim processing
         const sigHex = toHexString(authResult.signature);
-        await api.claimReward(id, sigHex);
+        await api.claimReward(rewardId, sigHex);
         
-        // Optimistic update or re-fetch
-        setRewards(prev => prev.map(r => r.id === id ? { ...r, status: 'claimed' as const } : r));
-        // Refresh balance after claim
-        const newBalance = await getWalletBalance(user.walletAddress);
-        setBalance(newBalance);
-        alert("Claim request sent successfully.");
-    } else {
-        alert("Authentication Failed or Cancelled");
+        // Optimistic update
+        setRewards(prev => prev.map(r => r.id === rewardId ? { ...r, status: 'claimed' as const } : r));
+        
+        // Show success
+        setClaimModal(prev => ({ ...prev, status: 'success' }));
+      } else {
+        setClaimModal(prev => ({ 
+          ...prev, 
+          status: 'error',
+          errorMessage: 'Authentication cancelled or failed'
+        }));
       }
     } catch (error) {
       console.error("Claim failed:", error);
-      alert("Failed to process claim. Please try again.");
+      setClaimModal(prev => ({ 
+        ...prev, 
+        status: 'error',
+        errorMessage: 'Failed to process claim. Please try again.'
+      }));
     } finally {
       setClaimingId(null);
     }
@@ -87,29 +122,16 @@ export const Dashboard: React.FC = () => {
      setIsCheckingHoldings(true);
      
      try {
-        // Check for real SOL balance first as a proxy for "activity" or "holdings"
-        // in a real scenario we'd use getParsedTokenAccountsByOwner for SPL tokens
-        const currentBalance = await getWalletBalance(user.walletAddress);
+        const message = `Claim Holder Reward for account ${user.walletAddress}`;
+        const authResult = await signAuthenticationMessage(message);
         
-        // For now, we require > 0 SOL to prove it's not an empty burner
-        const hasFunds = currentBalance > 0;
-
-        if (hasFunds) {
-           const message = `Claim Holder Reward for account ${user.walletAddress}`;
-           const authResult = await signAuthenticationMessage(message);
-           
-           if (authResult) {
-               setHolderRewardClaimed(true);
-               // Optimistically add a small amount to local balance to show it worked
-               setBalance(prev => prev + 0.05); 
-               alert("Holder reward claimed successfully! +0.05 SOL (Simulated)");
-           }
-        } else {
-            alert("Wallet is empty. You must hold assets to claim rewards.");
+        if (authResult) {
+            setHolderRewardClaimed(true);
+            alert("Holder reward claimed successfully!");
         }
      } catch (e) {
          console.error(e);
-         alert("Error verifying holdings.");
+         alert("Error claiming reward.");
      } finally {
          setIsCheckingHoldings(false);
      }
@@ -140,8 +162,23 @@ export const Dashboard: React.FC = () => {
   const nextLevelXp = (user.level + 1) * 1000;
   const xpProgress = Math.min((user.xp / nextLevelXp) * 100, 100);
 
+
   return (
     <div className="pt-48 pb-20 min-h-screen max-w-6xl mx-auto px-4">
+      {/* Reward Claim Modal */}
+      <RewardClaimModal
+        isOpen={claimModal.isOpen}
+        rewardTitle={claimModal.rewardTitle}
+        rewardAmount={claimModal.rewardAmount}
+        status={claimModal.status}
+        errorMessage={claimModal.errorMessage}
+        onConfirm={handleClaim}
+        onClose={() => {
+          setClaimModal({ isOpen: false, rewardId: null, rewardTitle: '', rewardAmount: '', status: 'pending' });
+          setClaimingId(null);
+        }}
+      />
+      
       <div className="grid md:grid-cols-3 gap-8">
         
         {/* Left Column: Profile & Wallet */}
@@ -226,15 +263,6 @@ export const Dashboard: React.FC = () => {
             </Link>
           </div>
 
-          {/* Wallet Card */}
-          <div className="bg-z-obsidian border border-z-steel-gray/20 p-6">
-            <h3 className="text-z-steel-gray text-xs font-bold uppercase mb-4">Wallet Balance</h3>
-            <div className="text-4xl font-display font-bold text-white">
-              {balance.toFixed(4).replace(/\.?0+$/, '').replace(/(\.\d{1,2})0+$/, '$1') || '0.00'}
-              <span className="text-z-violet-base ml-2">SOL</span>
-            </div>
-          </div>
-
           {/* Holder Rewards Card */}
           <div className="bg-z-obsidian border border-z-violet-base/20 p-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-z-violet-base/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -291,11 +319,11 @@ export const Dashboard: React.FC = () => {
                   {reward.status === 'available' ? (
                     <Button 
                       size="sm" 
-                      onClick={() => handleClaim(reward.id)}
+                      onClick={() => openClaimModal(reward.id)}
                       disabled={claimingId === reward.id}
                       className="min-w-[100px]"
                     >
-                      {claimingId === reward.id ? 'SIGNING...' : 'CLAIM'}
+                      CLAIM
                     </Button>
                   ) : (
                     <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">

@@ -25,7 +25,6 @@ export const Settings: React.FC = () => {
 
   const [privacy, setPrivacy] = useState({
     publicProfile: true,
-    showBalance: false,
     showMatchHistory: true,
   });
 
@@ -111,14 +110,6 @@ export const Settings: React.FC = () => {
                 <p className="text-z-steel-gray text-sm font-mono">Allow other users to view your profile and stats.</p>
               </div>
               <Toggle checked={privacy.publicProfile} onChange={(v) => setPrivacy({...privacy, publicProfile: v})} />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-bold">Show Wallet Balance</h3>
-                <p className="text-z-steel-gray text-sm font-mono">Display your SOL balance on the dashboard header.</p>
-              </div>
-              <Toggle checked={privacy.showBalance} onChange={(v) => setPrivacy({...privacy, showBalance: v})} />
             </div>
 
             <div className="flex items-center justify-between">

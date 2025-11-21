@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { ZShard } from '../components/ZShard';
+import { TournamentCountdown } from '../components/TournamentCountdown';
 import { useUser } from '../context/UserContext';
 import '../styles/howItWorks.css';
 
@@ -61,6 +62,11 @@ export const Home: React.FC = () => {
              </Link>
           </div>
         </div>
+      </section>
+
+      {/* Tournament Countdown */}
+      <section className="max-w-4xl mx-auto px-4 mb-16">
+        <TournamentCountdown />
       </section>
 
       {/* How It Works */}

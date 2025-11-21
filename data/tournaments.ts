@@ -19,7 +19,7 @@ export const tournaments: TournamentMeta[] = [
     image: '/games/valorant.jpg',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '40 SOL',
+    totalPrizePool: '2.5 SOL',
     rules: [
       '5v5 – Best of 3 format',
       'North American servers',
@@ -34,7 +34,7 @@ export const tournaments: TournamentMeta[] = [
     image: '/games/dota2.jpg',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '55 SOL',
+    totalPrizePool: '3.5 SOL',
     rules: [
       'Captains Mode – Best of 1',
       'SEA & US-West servers',
@@ -49,7 +49,7 @@ export const tournaments: TournamentMeta[] = [
     image: '/games/csgo.jpg',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '30 SOL',
+    totalPrizePool: '2.0 SOL',
     rules: [
       'MR15 – Best of 1',
       'VAC secured lobbies only',
@@ -64,7 +64,7 @@ export const tournaments: TournamentMeta[] = [
     image: '/games/lol.jpg',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '45 SOL',
+    totalPrizePool: '3.0 SOL',
     rules: [
       'Tournament Draft – Best of 1',
       'NA servers (Chicago)',
@@ -80,7 +80,7 @@ export const tournaments: TournamentMeta[] = [
     logoOverlay: '/zenthfn.png',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '18 SOL',
+    totalPrizePool: '1.5 SOL',
     rules: [
       'Zero Build – Duos',
       'Kill race format',
@@ -95,11 +95,11 @@ export const tournaments: TournamentMeta[] = [
     image: '/games/cod.jpg',
     status: 'coming-soon',
     activeTournaments: 0,
-    totalPrizePool: '22 SOL',
+    totalPrizePool: '2.0 SOL',
     rules: [
       'Search & Destroy – Best of 5',
       'Cross-play enabled',
-      'Gentleman’s agreement list enforced',
+      'Gentleman\'s agreement list enforced',
       'Must stream POV for verification',
     ],
     registeredPlayers: [],

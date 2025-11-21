@@ -116,13 +116,23 @@ export const Navbar: React.FC = () => {
               <NavLink to="/tournaments" label="Tournaments" active={location.pathname.startsWith('/tournaments') || location.pathname === '/compete'} />
               <NavLink to="/leaderboards" label="Leaderboards" active={location.pathname === '/leaderboards'} />
               <NavLink to="/vote" label="Vote" active={location.pathname === '/vote'} />
-              <NavLink to="/showcase" label="Showcase" active={location.pathname === '/showcase'} />
               <NavLink to="/faq" label="FAQ" active={location.pathname === '/faq'} />
               <NavLink to="/dashboard" label="Dashboard" active={location.pathname === '/dashboard'} />
             </div>
 
             {/* Right: Actions (Desktop) */}
             <div className="hidden lg:flex items-center gap-4">
+               <a
+                 href="https://twitter.com/ZenthFUN"
+                 target="_blank"
+                 rel="noreferrer"
+                 className="text-z-steel-gray hover:text-z-violet-peak transition-colors duration-300"
+                 title="Follow @ZenthFUN on Twitter"
+               >
+                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                 </svg>
+               </a>
                <a
                  href="https://pump.fun/profile/zenthgg"
                  target="_blank"
@@ -235,12 +245,32 @@ export const Navbar: React.FC = () => {
                <Link to="/tournaments" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Tournaments</Link>
                <Link to="/leaderboards" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Leaderboards</Link>
                <Link to="/vote" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Vote</Link>
-               <Link to="/showcase" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Showcase</Link>
                <Link to="/faq" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>FAQ</Link>
                <Link to="/dashboard" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Dashboard</Link>
                <Link to="/profile" className="text-2xl font-display font-bold uppercase italic text-white hover:text-z-violet-peak hover:translate-x-2 transition-all" onClick={() => setMobileOpen(false)}>Profile</Link>
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto space-y-4">
+              <div className="flex items-center gap-4 justify-center">
+                <a
+                  href="https://twitter.com/ZenthFUN"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-z-steel-gray hover:text-z-violet-peak transition-colors duration-300"
+                  title="Follow @ZenthFUN on Twitter"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://pump.fun/profile/zenthgg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-display font-bold italic tracking-widest px-4 py-2 rounded-md bg-gradient-to-r from-z-violet-base to-z-violet-peak text-white"
+                >
+                  BUY $ZENTH
+                </a>
+              </div>
               {user ? (
                  <div className="w-full mb-4">
                     <div className="text-white font-display italic text-xl mb-4">{user.username}</div>

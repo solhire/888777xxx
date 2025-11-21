@@ -54,11 +54,11 @@ export const TournamentDetail: React.FC = () => {
             </div>
 
             <div className="border border-z-steel-gray/20 p-4">
-              <h3 className="text-white font-display text-xl mb-2">Registered Pilots</h3>
+              <h3 className="text-white font-display text-xl mb-2">Registered Players</h3>
               <p className="text-z-steel-gray text-sm font-mono">
                 {tournament.registeredPlayers.length === 0
-                  ? 'No pilots listed yet. Be the first to claim a slot once the gates open.'
-                  : `${tournament.registeredPlayers.length} pilots verified.`}
+                  ? 'No players registered yet. Registration opens when tournament status is live.'
+                  : `${tournament.registeredPlayers.length} players registered.`}
               </p>
             </div>
 

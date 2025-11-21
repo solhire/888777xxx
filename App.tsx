@@ -5,13 +5,11 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { BottomNav } from './components/BottomNav';
 import { ToastStack } from './components/ToastStack';
 import { AdminBanner } from './components/AdminBanner';
-import { PasswordProtection } from './components/PasswordProtection';
 import { Home } from './pages/Home';
 import { Compete } from './pages/Compete';
 import { Tournaments } from './pages/Tournaments';
 import { TournamentDetail } from './pages/TournamentDetail';
 import { Leaderboards } from './pages/Leaderboards';
-import { Showcase } from './pages/Showcase';
 import { Dashboard } from './pages/Dashboard';
 import { TermsOfService } from './pages/TermsOfService';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
@@ -40,36 +38,33 @@ const Footer: React.FC = () => (
 const App: React.FC = () => {
   return (
     <AdminProvider>
-      <PasswordProtection>
-        <Router>
-          <ScrollToTop />
-          <div className="bg-black min-h-screen flex flex-col text-white font-sans selection:bg-z-violet-base selection:text-white">
-            <Navbar />
-            <ToastStack />
-            <div className="flex-grow pb-16 lg:pb-0">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/tournaments" element={<Tournaments />} />
-                <Route path="/tournaments/:id" element={<TournamentDetail />} />
-                <Route path="/compete" element={<Compete />} />
-                <Route path="/leaderboards" element={<Leaderboards />} />
-                <Route path="/showcase" element={<Showcase />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/referrals" element={<Referrals />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/vote" element={<Vote />} />
-              </Routes>
-            </div>
-            <Footer />
-            <BottomNav />
+      <Router>
+        <ScrollToTop />
+        <div className="bg-black min-h-screen flex flex-col text-white font-sans selection:bg-z-violet-base selection:text-white">
+          <Navbar />
+          <ToastStack />
+          <div className="flex-grow pb-16 lg:pb-0">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/tournaments" element={<Tournaments />} />
+              <Route path="/tournaments/:id" element={<TournamentDetail />} />
+              <Route path="/compete" element={<Compete />} />
+              <Route path="/leaderboards" element={<Leaderboards />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/referrals" element={<Referrals />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/vote" element={<Vote />} />
+            </Routes>
           </div>
-        </Router>
-      </PasswordProtection>
+          <Footer />
+          <BottomNav />
+        </div>
+      </Router>
     </AdminProvider>
   );
 };

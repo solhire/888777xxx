@@ -4,7 +4,7 @@ import { useToast } from '../context/ToastContext';
 const variantStyles = {
   success: 'border-green-400 text-green-200',
   info: 'border-z-violet-base text-white',
-  error: 'border-red-400 text-red-200',
+  error: 'border-z-violet-peak/50 text-white bg-gradient-to-r from-z-violet-base/20 to-z-violet-peak/20 shadow-[0_0_20px_rgba(180,108,255,0.4)]',
 };
 
 export const ToastStack: React.FC = () => {
