@@ -12,7 +12,7 @@ export const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const sessionAuth = sessionStorage.getItem('zenth_access_granted');
+    const sessionAuth = sessionStorage.getItem('nexil_access_granted');
     if (sessionAuth === 'true') {
       setIsAuthenticated(true);
     }
@@ -22,7 +22,7 @@ export const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children
     e.preventDefault();
     if (password === 'lol24') {
       setIsAuthenticated(true);
-      sessionStorage.setItem('zenth_access_granted', 'true');
+      sessionStorage.setItem('nexil_access_granted', 'true');
       setError(false);
     } else {
       setError(true);
@@ -72,7 +72,7 @@ export const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children
         </form>
 
         <div className="text-[10px] text-z-steel-gray/30 font-mono uppercase tracking-[0.3em]">
-            ZENTH SYSTEM v1.0
+            NEXIL SYSTEM v1.0
         </div>
       </div>
     </div>

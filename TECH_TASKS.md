@@ -1,4 +1,4 @@
-# ZENTH // TECH TASKS & INTEGRATION
+# NEXIL // TECH TASKS & INTEGRATION
 
 ## Overview
 Frontend is strictly view-layer and mocking wallet signatures. Real payout logic must be handled server-side or via smart contract.

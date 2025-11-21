@@ -31,7 +31,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const checkAuth = async () => {
       const provider = getProvider();
-      const shouldAutoConnect = localStorage.getItem('zenth_auto_connect') === 'true';
+      const shouldAutoConnect = localStorage.getItem('nexil_auto_connect') === 'true';
 
       if (shouldAutoConnect && provider) {
         try {
@@ -55,7 +55,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           provider.on('disconnect', () => {
               setUser(null);
               setIsAuthenticated(false);
-              localStorage.removeItem('zenth_auto_connect');
+              localStorage.removeItem('nexil_auto_connect');
           });
           provider.on('accountChanged', (publicKey: any) => {
               if (publicKey) {
@@ -63,7 +63,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               } else {
                   setUser(null);
                   setIsAuthenticated(false);
-                  localStorage.removeItem('zenth_auto_connect');
+                  localStorage.removeItem('nexil_auto_connect');
               }
           });
       }
@@ -80,7 +80,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (userData) {
         setUser(userData);
         setIsAuthenticated(true);
-        localStorage.setItem('zenth_auto_connect', 'true');
+        localStorage.setItem('nexil_auto_connect', 'true');
         return userData;
       } else {
         setUser(null); // User needs to register
@@ -104,7 +104,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       const resp = await provider.connect();
-      localStorage.setItem('zenth_auto_connect', 'true');
+      localStorage.setItem('nexil_auto_connect', 'true');
       return await loadUser(resp.publicKey.toString());
     } catch (err) {
       console.error("Login failed", err);
@@ -119,7 +119,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
      const walletAddress = provider.publicKey.toString();
      
      // Sign message to prove ownership before registering
-     const message = `Register as ${username} on ZENTH`;
+     const message = `Register as ${username} on NEXIL`;
      const authResult = await signAuthenticationMessage(message);
 
      if (!authResult) throw new Error("Signature rejected");
@@ -128,7 +128,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
      const newUser = await api.registerUser(walletAddress, username, signatureHex, referralCode);
      setUser(newUser);
      setIsAuthenticated(true);
-     localStorage.setItem('zenth_auto_connect', 'true');
+     localStorage.setItem('nexil_auto_connect', 'true');
   };
 
   const updateUsername = async (username: string) => {
@@ -147,7 +147,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.error("Disconnect error:", e);
     }
     
-    localStorage.removeItem('zenth_auto_connect');
+    localStorage.removeItem('nexil_auto_connect');
     setUser(null);
     setIsAuthenticated(false);
   };

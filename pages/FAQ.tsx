@@ -9,7 +9,7 @@ const faqs = [
   {
     question: 'Is this safe?',
     answer:
-      'All wallet interactions happen through Phantom via secure message signing. ZENTH never sees your private keys. We require proof-of-play (replays, screenshots) to prevent fraudulent claims. However, until smart contract automation is live, payouts require manual processing which carries custodial risk. Users should only deposit funds they are comfortable with this risk.',
+      'All wallet interactions happen through Phantom via secure message signing. NEXIL never sees your private keys. We require proof-of-play (replays, screenshots) to prevent fraudulent claims. However, until smart contract automation is live, payouts require manual processing which carries custodial risk. Users should only deposit funds they are comfortable with this risk.',
   },
   {
     question: 'What if my game crashes?',
@@ -19,7 +19,7 @@ const faqs = [
   {
     question: 'Is this legal in my jurisdiction?',
     answer:
-      'Wagering on video games for money may be considered gambling in many jurisdictions. ZENTH does not provide legal advice. Users are responsible for ensuring their participation complies with local laws. We do not accept users from jurisdictions where online gambling is prohibited. By using ZENTH, you represent that you are legally permitted to participate in your jurisdiction.',
+      'Wagering on video games for money may be considered gambling in many jurisdictions. NEXIL does not provide legal advice. Users are responsible for ensuring their participation complies with local laws. We do not accept users from jurisdictions where online gambling is prohibited. By using NEXIL, you represent that you are legally permitted to participate in your jurisdiction.',
   },
 ];
 
@@ -31,7 +31,7 @@ export const FAQ: React.FC = () => {
           QUESTIONS?
         </h1>
         <p className="text-z-onyx font-mono border-l-2 border-z-violet-base pl-4">
-          Everything you need to know about wallets, payouts, and match disputes on ZENTH.
+          Everything you need to know about wallets, payouts, and match disputes on NEXIL.
         </p>
       </header>
 

@@ -77,7 +77,7 @@ export const tournaments: TournamentMeta[] = [
     id: 'fortnite',
     title: 'FORTNITE',
     image: '/games/fn76.jpg',
-    logoOverlay: '/zenthfn.png',
+    logoOverlay: '/nexilfn.png',
     status: 'coming-soon',
     activeTournaments: 0,
     totalPrizePool: '1.5 SOL',

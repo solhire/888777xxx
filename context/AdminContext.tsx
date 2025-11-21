@@ -14,7 +14,7 @@ const ADMIN_WALLET = "4nW6MkoZbLuTouoqvRzoZWCyFVypCKu9R3wRCxZZCTkV";
 export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Default CA or load from localStorage if you want persistence across reloads
   const [contractAddress, setContractAddress] = useState(() => {
-    return localStorage.getItem('zenth_ca') || "Pending Launch";
+    return localStorage.getItem('nexil_ca') || "Pending Launch";
   });
   
   const { user } = useUser();
@@ -22,7 +22,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const updateContractAddress = (address: string) => {
     setContractAddress(address);
-    localStorage.setItem('zenth_ca', address);
+    localStorage.setItem('nexil_ca', address);
   };
 
   return (

@@ -37,7 +37,7 @@ export const Referrals: React.FC = () => {
           AFFILIATE NETWORK
         </h1>
         <p className="text-z-onyx font-mono max-w-xl border-l-2 border-z-violet-base pl-4">
-          Expand the ZENTH network. Earn 10% of platform fees from every match your recruits play.
+          Expand the NEXIL network. Earn 10% of platform fees from every match your recruits play.
         </p>
       </header>
 

@@ -1,4 +1,4 @@
-# REBRAND CHANGELOG: ZENTH v1.0
+# REBRAND CHANGELOG: NEXIL v1.0
 
 - **Visual Identity**: Implemented "Vaulted" aesthetic.
   - Added `z-shard.svg` logo system.

@@ -212,7 +212,7 @@ export const Vote: React.FC = () => {
           PROTOCOL GOVERNANCE
         </h1>
         <p className="text-z-onyx font-mono max-w-xl border-l-2 border-z-violet-base pl-4">
-          Direct the future of ZENTH. Vote on integrations and features using your staked influence.
+          Direct the future of NEXIL. Vote on integrations and features using your staked influence.
         </p>
       </header>
 

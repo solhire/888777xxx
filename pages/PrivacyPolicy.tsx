@@ -15,7 +15,7 @@ export const PrivacyPolicy: React.FC = () => {
         <section>
           <h2 className="text-xl font-bold text-white mb-4">1. DATA COLLECTION</h2>
           <p>
-            ZENTH prioritizes user anonymity. We collect minimal data necessary to operate the service:
+            NEXIL prioritizes user anonymity. We collect minimal data necessary to operate the service:
           </p>
           <ul className="list-disc pl-5 space-y-2 mt-2">
             <li><strong>Wallet Address:</strong> Your public Solana key is used as your primary identifier.</li>
@@ -39,7 +39,7 @@ export const PrivacyPolicy: React.FC = () => {
         <section>
           <h2 className="text-xl font-bold text-white mb-4">3. BLOCKCHAIN TRANSPARENCY</h2>
           <p>
-            Please be aware that all transactions on the Solana blockchain are public and permanent. Your wallet address and transaction history (e.g., entry fees paid, prizes won) are visible on the public ledger and cannot be hidden or deleted by ZENTH.
+            Please be aware that all transactions on the Solana blockchain are public and permanent. Your wallet address and transaction history (e.g., entry fees paid, prizes won) are visible on the public ledger and cannot be hidden or deleted by NEXIL.
           </p>
         </section>
 
@@ -50,7 +50,7 @@ export const PrivacyPolicy: React.FC = () => {
           </p>
           <ul className="list-disc pl-5 space-y-2 mt-2">
             <li><strong>Service Providers:</strong> Hosting, analytics, and security vendors who assist in operating the platform.</li>
-            <li><strong>Legal Authorities:</strong> If required by law or to protect the rights and safety of ZENTH and its users.</li>
+            <li><strong>Legal Authorities:</strong> If required by law or to protect the rights and safety of NEXIL and its users.</li>
           </ul>
         </section>
 
@@ -70,7 +70,7 @@ export const PrivacyPolicy: React.FC = () => {
 
         <div className="pt-8 border-t border-z-steel-gray/20">
           <p className="text-xs">
-            For privacy-related inquiries, contact <a href="mailto:privacy@zenth.gg" className="text-z-violet-peak hover:underline">privacy@zenth.gg</a>.
+            For privacy-related inquiries, contact <a href="mailto:privacy@nexil.gg" className="text-z-violet-peak hover:underline">privacy@nexil.gg</a>.
           </p>
         </div>
       </div>

@@ -111,7 +111,7 @@ export const Home: React.FC = () => {
       <section className="platform-section">
         <div className="platform-inner">
           <div className="platform-header">
-            <p>WHY ZENTH</p>
+            <p>WHY NEXIL</p>
             <h2>The Platform</h2>
             <span>Infrastructure built for escrowed wagers, telemetry, and instant releases.</span>
           </div>
@@ -153,7 +153,7 @@ export const Home: React.FC = () => {
       <section className="platform-section" style={{ background: 'linear-gradient(180deg, #020202 0%, #0a0a0a 100%)', borderTop: 'none' }}>
         <div className="platform-inner">
           <div className="platform-header">
-            <p>$ZENTH UTILITY</p>
+            <p>$NEXIL UTILITY</p>
             <h2>The Fuel</h2>
             <span>Powering the ecosystem with discounts, rewards, and governance.</span>
           </div>
@@ -163,7 +163,7 @@ export const Home: React.FC = () => {
                 title: 'Fee Discounts',
                 metric: '20%',
                 metricLabel: 'LOWER FEES',
-                copy: 'Pay entry fees in $ZENTH to reduce platform costs. Smart contracts automatically burn a portion of fees.',
+                copy: 'Pay entry fees in $NEXIL to reduce platform costs. Smart contracts automatically burn a portion of fees.',
               },
               {
                 title: 'Premium Access',
@@ -181,7 +181,7 @@ export const Home: React.FC = () => {
                 title: 'Active Rewards',
                 metric: 'Daily',
                 metricLabel: 'PAYOUTS',
-                copy: 'Earn $ZENTH through activity and challenges. Top performers receive rakeback from platform volume.',
+                copy: 'Earn $NEXIL through activity and challenges. Top performers receive rakeback from platform volume.',
               },
             ].map((block) => (
               <div className="platform-card" key={block.title} style={{ borderColor: 'rgba(180, 108, 255, 0.15)' }}>

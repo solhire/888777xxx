@@ -24,12 +24,12 @@ import { AdminProvider } from './context/AdminContext';
 const Footer: React.FC = () => (
   <footer className="py-8 border-t border-z-steel-gray/20 bg-z-obsidian/50">
     <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-z-steel-gray">
-      <div>© 2025 ZENTH. All rights reserved.</div>
+      <div>© 2025 NEXIL. All rights reserved.</div>
       <div className="flex gap-6 flex-wrap justify-center">
         <Link to="/faq" className="hover:text-z-violet-base transition-colors">FAQ</Link>
         <Link to="/terms" className="hover:text-z-violet-base transition-colors">TERMS OF SERVICE</Link>
         <Link to="/privacy" className="hover:text-z-violet-base transition-colors">PRIVACY POLICY</Link>
-        <a href="mailto:support@zenth.gg" className="hover:text-z-violet-base transition-colors">SUPPORT</a>
+        <a href="mailto:support@nexil.gg" className="hover:text-z-violet-base transition-colors">SUPPORT</a>
       </div>
     </div>
   </footer>

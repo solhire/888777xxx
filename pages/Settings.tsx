@@ -12,7 +12,7 @@ const Toggle: React.FC<{ checked: boolean; onChange: (val: boolean) => void }> =
   </button>
 );
 
-const STORAGE_KEY = 'zenth_settings';
+const STORAGE_KEY = 'nexil_settings';
 
 interface SettingsData {
   notifications: {
@@ -50,17 +50,17 @@ export const Settings: React.FC = () => {
   const [hasChanges, setHasChanges] = useState(false);
 
   // Load settings from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setSettings({ ...defaultSettings, ...parsed });
-      } catch (e) {
-        console.error('Failed to load settings:', e);
-      }
+useEffect(() => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      setSettings({ ...defaultSettings, ...parsed });
+    } catch (e) {
+      console.error('Failed to load settings:', e);
     }
-  }, []);
+  }
+}, []);
 
   // Apply reduce motion setting
   useEffect(() => {

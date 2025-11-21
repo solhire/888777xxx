@@ -107,7 +107,7 @@ export const Navbar: React.FC = () => {
                  <ZShard />
               </div>
               <span className="font-display font-black text-2xl tracking-tighter italic text-white transform -skew-x-6">
-                ZENTH
+                NEXIL
               </span>
             </Link>
 
@@ -125,22 +125,22 @@ export const Navbar: React.FC = () => {
                <button
                  onClick={(e) => {
                    e.preventDefault();
-                   window.open('https://twitter.com/ZenthFUN', '_blank', 'noopener,noreferrer');
+                   window.open('https://twitter.com/NexilHQ', '_blank', 'noopener,noreferrer');
                  }}
                  className="text-z-steel-gray hover:text-z-violet-peak transition-colors duration-300"
-                 title="Follow @ZenthFUN on Twitter"
+                 title="Follow @NexilHQ on Twitter"
                >
                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                  </svg>
                </button>
                <a
-                 href="https://pump.fun/profile/zenthgg"
+                 href="https://pump.fun/profile/nexil"
                  target="_blank"
                  rel="noreferrer"
                  className="text-[10px] font-display font-bold italic tracking-widest px-4 py-2 rounded-md bg-gradient-to-r from-z-violet-base to-z-violet-peak text-white shadow-[0_0_20px_rgba(180,108,255,0.4)] hover:shadow-[0_0_30px_rgba(180,108,255,0.8)] hover:scale-105 transition-all duration-300 border border-white/10"
                >
-                 BUY $ZENTH
+                 BUY $NEXIL
                </a>
                <div className="relative" ref={userMenuRef}>
                <Button 
@@ -255,22 +255,22 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    window.open('https://twitter.com/ZenthFUN', '_blank', 'noopener,noreferrer');
+                    window.open('https://twitter.com/NexilHQ', '_blank', 'noopener,noreferrer');
                   }}
                   className="text-z-steel-gray hover:text-z-violet-peak transition-colors duration-300"
-                  title="Follow @ZenthFUN on Twitter"
+                  title="Follow @NexilHQ on Twitter"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </button>
                 <a
-                  href="https://pump.fun/profile/zenthgg"
+                  href="https://pump.fun/profile/nexil"
                   target="_blank"
                   rel="noreferrer"
                   className="text-xs font-display font-bold italic tracking-widest px-4 py-2 rounded-md bg-gradient-to-r from-z-violet-base to-z-violet-peak text-white"
                 >
-                  BUY $ZENTH
+                  BUY $NEXIL
                 </a>
               </div>
               {user ? (

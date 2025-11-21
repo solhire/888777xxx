@@ -2,7 +2,7 @@ import { RewardClaim, LeaderboardEntry, Challenge, Clip, User } from '../types';
 
 // @ts-ignore
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
-const storageKey = (walletAddress: string) => `zenth_user_${walletAddress}`;
+const storageKey = (walletAddress: string) => `nexil_user_${walletAddress}`;
 
 class ApiService {
   private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -118,11 +118,11 @@ class ApiService {
 
   // Votes
   private getVotesKey() {
-    return 'zenth_votes';
+    return 'nexil_votes';
   }
 
   private getUserVotesKey(walletAddress: string) {
-    return `zenth_user_votes_${walletAddress}`;
+    return `nexil_user_votes_${walletAddress}`;
   }
 
   async getProposalVotes(proposalId: string): Promise<number> {

@@ -1,6 +1,6 @@
-# ZENTH Frontend
+# NEXIL Frontend
 
-This is the React frontend for ZENTH, the premier competitive platform.
+This is the React frontend for NEXIL, the Solana-native competitive protocol.
 
 ## Quick Start
 
@@ -21,7 +21,7 @@ To test the wallet features, you must have the Phantom Wallet extension installe
 
 ## Architecture
 - **Styling**: Tailwind CSS (configured via script injection in index.html for portability).
-- **Router**: BrowserRouter used for clean URLs without hash (#).
+- **Router**: HashRouter ensure deep links such as `#/admin` resolve on static hosts.
 - **Services**: Mock services located in `/services` folder.
 
 ## Solana RPC Configuration
