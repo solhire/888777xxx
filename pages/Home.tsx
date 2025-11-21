@@ -85,9 +85,9 @@ export const Home: React.FC = () => {
                 copy: 'Upload replays or telemetry. Ops reviews disputes in under 15 minutes.',
               },
               {
-                title: 'Instant Payout',
-                subtitle: 'Trustless release',
-                copy: 'Smart contract finalizes and pushes rewards directly to your wallet.',
+                title: 'Payout',
+                subtitle: 'Escrow release',
+                copy: 'Winners receive payouts after match verification. Funds are released from escrow via smart contract once results are confirmed.',
               },
             ].map((step, index) => (
               <div className="hiw-step" key={step.title}>
@@ -112,22 +112,22 @@ export const Home: React.FC = () => {
           <div className="platform-grid">
             {[
               {
-                title: 'Trustless Escrow',
-                metric: '1.3s',
-                metricLabel: 'Average settlement',
-                copy: 'Entries are locked inside Solana programs. When ops verifies telemetry, the contract releases funds without touching a hot wallet.',
+                title: 'Escrow System',
+                metric: 'On-chain',
+                metricLabel: 'Smart contract',
+                copy: 'Entry fees are locked in program-derived escrow accounts. Funds remain secure until match completion. Winners receive automatic payouts via verified signatures.',
               },
               {
-                title: 'Anti-Cheat Mesh',
-                metric: '4 data feeds',
-                metricLabel: 'per match',
-                copy: 'Replay hashes, screenshot EXIF, and telemetry snapshots are triaged by human moderators before any SOL is released.',
+                title: 'Match Verification',
+                metric: 'Human review',
+                metricLabel: 'Moderator triage',
+                copy: 'Replays, screenshots, and match data are reviewed by human moderators before payouts are processed. Automated verification systems are in development.',
               },
               {
-                title: 'Ranked Economy',
-                metric: 'S → C',
-                metricLabel: 'Season tiers',
-                copy: 'Matchmaking respects your tier and MMR history. Higher brackets unlock larger SOL caps and limited-entry events.',
+                title: 'Ranking System',
+                metric: 'Planned',
+                metricLabel: 'In development',
+                copy: 'Tier-based matchmaking and ranked economy features are planned for future releases. Current tournaments operate without tier restrictions.',
               },
             ].map((block) => (
               <div className="platform-card" key={block.title}>

@@ -4,17 +4,22 @@ const faqs = [
   {
     question: 'How do I get paid?',
     answer:
-      'Prize pools are held in a secure escrow. When a match is verified, the smart contract releases SOL directly to the winner’s wallet. Until the contract is live, payouts are processed manually by the tournament ops team.',
+      'Currently, payouts are processed manually by the tournament operations team after match verification. Prize pools are held in escrow until winners are confirmed. Smart contract-based automatic payouts are planned for future release. Please note that manual processing introduces custodial risk until the automated system is deployed.',
   },
   {
     question: 'Is this safe?',
     answer:
-      'All wallet interactions happen through Phantom via secure message signing. ZENTH never sees your private keys. We also require proof-of-play (replays, screenshots) to prevent fraudulent claims.',
+      'All wallet interactions happen through Phantom via secure message signing. ZENTH never sees your private keys. We require proof-of-play (replays, screenshots) to prevent fraudulent claims. However, until smart contract automation is live, payouts require manual processing which carries custodial risk. Users should only deposit funds they are comfortable with this risk.',
   },
   {
     question: 'What if my game crashes?',
     answer:
       'Open a dispute ticket from the match details panel. Submit your replay or crash log within 15 minutes. The match will be paused and reviewed by moderators before any SOL moves.',
+  },
+  {
+    question: 'Is this legal in my jurisdiction?',
+    answer:
+      'Wagering on video games for money may be considered gambling in many jurisdictions. ZENTH does not provide legal advice. Users are responsible for ensuring their participation complies with local laws. We do not accept users from jurisdictions where online gambling is prohibited. By using ZENTH, you represent that you are legally permitted to participate in your jurisdiction.',
   },
 ];
 

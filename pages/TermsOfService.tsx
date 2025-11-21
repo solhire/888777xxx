@@ -27,16 +27,49 @@ export const TermsOfService: React.FC = () => {
         </section>
 
         <section>
+          <h2 className="text-xl font-bold text-white mb-4">2A. LEGAL COMPLIANCE & GAMBLING DISCLAIMER</h2>
+          <p className="text-red-400 font-bold mb-2">
+            ⚠️ IMPORTANT LEGAL NOTICE
+          </p>
+          <p className="mb-3">
+            Wagering on video games for money may constitute gambling under the laws of many jurisdictions. ZENTH does not provide legal advice regarding the legality of participation in your jurisdiction.
+          </p>
+          <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li>
+              <strong>Jurisdiction Restrictions:</strong> You are responsible for determining whether participation in ZENTH tournaments and wagers is legal in your jurisdiction. ZENTH does not accept users from jurisdictions where online gambling is prohibited or restricted.
+            </li>
+            <li>
+              <strong>No Legal Advice:</strong> ZENTH does not provide legal, tax, or regulatory advice. Consult with a qualified attorney in your jurisdiction before participating.
+            </li>
+            <li>
+              <strong>Age Restrictions:</strong> You must be of legal age to gamble in your jurisdiction (typically 18 or 21 years old, depending on location).
+            </li>
+            <li>
+              <strong>Prohibited Jurisdictions:</strong> Users from jurisdictions where online gambling is illegal are prohibited from using ZENTH. This may include, but is not limited to, certain U.S. states and countries with strict gambling prohibitions.
+            </li>
+            <li>
+              <strong>Compliance:</strong> By using ZENTH, you represent and warrant that: (a) you are legally permitted to participate in skill-based gaming and wagering activities in your jurisdiction; (b) you are not located in a prohibited jurisdiction; and (c) your participation does not violate any applicable laws or regulations.
+            </li>
+          </ul>
+          <p className="mt-3 text-yellow-400">
+            ZENTH reserves the right to restrict access from any jurisdiction at its sole discretion. Failure to comply with applicable laws may result in account termination and forfeiture of funds.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-xl font-bold text-white mb-4">3. TOURNAMENTS & WAGERS</h2>
           <ul className="list-disc pl-5 space-y-2 mt-2">
             <li>
-              <strong>Entry Fees:</strong> Participation in certain tournaments or wagers requires depositing SOL into a smart contract escrow. All entry fees are final and non-refundable once a match has commenced.
+              <strong>Entry Fees:</strong> Participation in certain tournaments or wagers requires depositing SOL into escrow. All entry fees are final and non-refundable once a match has commenced.
             </li>
             <li>
-              <strong>Payouts:</strong> Winnings are distributed automatically via smart contract upon match verification. ZENTH takes a platform fee (typically 2-5%) from the total prize pool to support development and operations.
+              <strong>Payouts:</strong> Currently, winnings are distributed manually by the operations team after match verification. Smart contract-based automatic payouts are planned for future release. Manual processing introduces custodial risk until automation is deployed. ZENTH takes a platform fee (typically 2-5%) from the total prize pool to support development and operations.
             </li>
             <li>
               <strong>Disputes:</strong> In the event of a dispute (e.g., game crash, cheating allegation), funds may be frozen in escrow pending manual review by ZENTH administrators. Our decision is final.
+            </li>
+            <li>
+              <strong>Custodial Risk:</strong> Until smart contract automation is live, payouts require manual processing which carries custodial risk. Users should only deposit funds they are comfortable with this risk.
             </li>
           </ul>
         </section>
