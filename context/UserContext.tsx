@@ -9,7 +9,7 @@ interface UserContextType {
   isAuthenticated: boolean;
   login: () => Promise<User | null>;
   logout: () => Promise<void>;
-  register: (username: string) => Promise<void>;
+  register: (username: string, referralCode?: string) => Promise<void>;
   updateUsername: (username: string) => Promise<void>;
 }
 
@@ -95,7 +95,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (username: string) => {
+  const register = async (username: string, referralCode?: string) => {
      const provider = getProvider();
      if (!provider?.publicKey) throw new Error("Wallet not connected");
 
@@ -108,7 +108,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
      if (!authResult) throw new Error("Signature rejected");
 
      const signatureHex = toHexString(authResult.signature);
-     const newUser = await api.registerUser(walletAddress, username, signatureHex);
+     const newUser = await api.registerUser(walletAddress, username, signatureHex, referralCode);
      setUser(newUser);
      setIsAuthenticated(true);
   };

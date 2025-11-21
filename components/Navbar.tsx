@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { ZShard } from './ZShard';
 import { Button } from './Button';
 import { useUser } from '../context/UserContext';
@@ -26,12 +26,23 @@ export const Navbar: React.FC = () => {
   const { user, isAuthenticated, login, logout, register } = useUser();
   const { pushToast } = useToast();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const refCode = searchParams.get('ref');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Auto-open register modal if ref code is present and user is not logged in
+  useEffect(() => {
+      if (refCode && !isAuthenticated && !user) {
+          // We don't auto-open the modal immediately because they need to connect wallet first.
+          // But we can store it or just let the flow handle it.
+          // For better UX, let's just wait for them to click connect.
+      }
+  }, [refCode, isAuthenticated, user]);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -58,9 +69,6 @@ export const Navbar: React.FC = () => {
       // If login successful, loggedInUser will be non-null.
       // If login successful (wallet connected) but NO user found, loggedInUser is null.
       
-      // However, we need to distinguish between "User cancelled wallet" vs "User has no profile"
-      // We can check if wallet is connected directly or rely on `login` returning null.
-      
       // Better check:
       const provider = window.solana;
       if (provider?.publicKey && !loggedInUser) {
@@ -76,8 +84,10 @@ export const Navbar: React.FC = () => {
     <>
       <UsernameModal 
         isOpen={showRegisterModal} 
-        onSubmit={async (username) => {
-            await register(username);
+        initialValue=""
+        initialReferralCode={refCode}
+        onSubmit={async (username, referralCode) => {
+            await register(username, referralCode);
             pushToast({ message: `Agent registered as ${username}`, variant: 'success' });
             setShowRegisterModal(false);
         }}
@@ -170,6 +180,14 @@ export const Navbar: React.FC = () => {
                         >
                           <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">⬡</span>
                           DASHBOARD
+                        </Link>
+                        <Link 
+                          to="/settings" 
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-z-onyx hover:bg-z-violet-base/10 hover:text-white font-mono transition-all border-l-2 border-transparent hover:border-z-violet-base group"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="text-z-steel-gray group-hover:text-z-violet-peak transition-colors">⚙</span>
+                          SETTINGS
                         </Link>
                         <button 
                           className="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 font-mono transition-all border-l-2 border-transparent hover:border-red-500 group"

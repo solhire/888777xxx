@@ -5,6 +5,7 @@ import { signAuthenticationMessage, getWalletBalance } from '../services/walletS
 import { api } from '../services/api';
 import { RewardClaim } from '../types';
 import { useUser } from '../context/UserContext';
+import Avatar from 'boring-avatars';
 
 // Helper for hex string
 const toHexString = (byteArray: Uint8Array) => {
@@ -85,31 +86,33 @@ export const Dashboard: React.FC = () => {
      if (!user?.walletAddress) return;
      setIsCheckingHoldings(true);
      
-     // Simulate checking for token holdings
-     setTimeout(async () => {
-         try {
-             // This is where the actual token balance check would happen
-             // const hasTokens = await checkTokenBalance(user.walletAddress, ZENTH_TOKEN_ADDRESS);
-             const hasTokens = true; // Mocked as true for now
+     try {
+        // Check for real SOL balance first as a proxy for "activity" or "holdings"
+        // in a real scenario we'd use getParsedTokenAccountsByOwner for SPL tokens
+        const currentBalance = await getWalletBalance(user.walletAddress);
+        
+        // For now, we require > 0 SOL to prove it's not an empty burner
+        const hasFunds = currentBalance > 0;
 
-             if (hasTokens) {
-                const message = `Claim Holder Reward for holding $ZENTH`;
-                const authResult = await signAuthenticationMessage(message);
-                
-                if (authResult) {
-                    setHolderRewardClaimed(true);
-                    alert("Holder reward claimed successfully!");
-    }
-             } else {
-                 alert("No $ZENTH tokens found in wallet.");
-             }
-         } catch (e) {
-             console.error(e);
-             alert("Error verifying holdings.");
-         } finally {
-             setIsCheckingHoldings(false);
-         }
-     }, 1500);
+        if (hasFunds) {
+           const message = `Claim Holder Reward for account ${user.walletAddress}`;
+           const authResult = await signAuthenticationMessage(message);
+           
+           if (authResult) {
+               setHolderRewardClaimed(true);
+               // Optimistically add a small amount to local balance to show it worked
+               setBalance(prev => prev + 0.05); 
+               alert("Holder reward claimed successfully! +0.05 SOL (Simulated)");
+           }
+        } else {
+            alert("Wallet is empty. You must hold assets to claim rewards.");
+        }
+     } catch (e) {
+         console.error(e);
+         alert("Error verifying holdings.");
+     } finally {
+         setIsCheckingHoldings(false);
+     }
   };
 
   if (isAuthLoading) {
@@ -146,7 +149,14 @@ export const Dashboard: React.FC = () => {
           
           {/* Profile Card */}
           <div className="bg-z-obsidian border border-z-steel-gray/20 p-6 hover:border-z-violet-base/30 transition-colors duration-300">
-             <div className="w-20 h-20 bg-gradient-to-tr from-z-violet-base to-blue-500 rounded-full mb-4 border-2 border-white shadow-[0_0_15px_rgba(106,0,255,0.3)]"></div>
+             <div className="w-20 h-20 rounded-full mb-4 border-2 border-white shadow-[0_0_15px_rgba(106,0,255,0.3)] overflow-hidden">
+                <Avatar
+                  size={80}
+                  name={user.walletAddress}
+                  variant="beam"
+                  colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+                />
+             </div>
              <h2 className="text-xs text-z-steel-gray font-mono font-bold uppercase mb-1">WELCOME BACK,</h2>
 
              <h2 className="text-2xl font-display font-bold text-white italic mb-4 flex items-center gap-2">
@@ -193,6 +203,29 @@ export const Dashboard: React.FC = () => {
              </div>
           </div>
 
+          {/* Referrals Summary Card */}
+          <div className="bg-gradient-to-br from-z-obsidian to-z-violet-base/5 border border-z-steel-gray/20 p-6">
+            <div className="flex items-center justify-between mb-2">
+                <h3 className="text-z-steel-gray text-xs font-bold uppercase">Affiliate Stats</h3>
+                <Link to="/referrals" className="text-z-violet-peak text-[10px] font-bold uppercase hover:underline">View Full</Link>
+            </div>
+            <div className="flex justify-between items-end mb-4">
+                <div>
+                    <div className="text-2xl font-display font-bold text-white italic">{user.referralCount || 0}</div>
+                    <div className="text-[10px] text-z-steel-gray font-mono">RECRUITS</div>
+                </div>
+                <div className="text-right">
+                    <div className="text-xl font-display font-bold text-z-violet-peak">{user.referralEarnings || 0} SOL</div>
+                    <div className="text-[10px] text-z-steel-gray font-mono">EARNED</div>
+                </div>
+            </div>
+            <Link to="/referrals">
+                <Button size="sm" className="w-full bg-z-violet-base/10 border-z-violet-base/30 text-z-violet-peak hover:bg-z-violet-base/20">
+                    INVITE AGENTS
+                </Button>
+            </Link>
+          </div>
+
           {/* Wallet Card */}
           <div className="bg-z-obsidian border border-z-steel-gray/20 p-6">
             <h3 className="text-z-steel-gray text-xs font-bold uppercase mb-4">Wallet Balance</h3>
@@ -210,7 +243,7 @@ export const Dashboard: React.FC = () => {
                 Holder Rewards
             </h3>
             <p className="text-z-steel-gray text-xs font-mono mb-4">
-                Hold $ZENTH tokens to claim daily rewards.
+                Hold SOL or $ZENTH to claim daily rewards.
             </p>
             {holderRewardClaimed ? (
                 <div className="text-center py-2 bg-z-violet-base/10 border border-z-violet-base/30 text-z-violet-peak font-bold text-sm rounded">

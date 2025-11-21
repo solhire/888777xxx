@@ -3,6 +3,7 @@ import { useUser } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { UsernameModal } from '../components/UsernameModal';
 import { useToast } from '../context/ToastContext';
+import Avatar from 'boring-avatars';
 
 const formatAddress = (addr: string) => `${addr.slice(0, 4)}...${addr.slice(-4)}`;
 
@@ -23,11 +24,21 @@ export const Profile: React.FC = () => {
 
   return (
     <div className="pt-48 pb-20 min-h-screen max-w-4xl mx-auto px-4">
-      <header className="mb-10">
-        <p className="text-xs font-mono text-z-violet-base uppercase tracking-[0.3em]">Control Room</p>
-        <h1 className="font-display font-black text-5xl text-white italic transform -skew-x-3 mt-2">
-          Welcome back, {user.username}
-        </h1>
+      <header className="mb-10 flex flex-col md:flex-row items-center md:items-end gap-6">
+        <div className="w-24 h-24 rounded-full border-2 border-z-violet-base shadow-[0_0_20px_rgba(106,0,255,0.4)] overflow-hidden">
+           <Avatar
+             size={96}
+             name={user.walletAddress}
+             variant="beam"
+             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+           />
+        </div>
+        <div>
+          <p className="text-xs font-mono text-z-violet-base uppercase tracking-[0.3em]">Control Room</p>
+          <h1 className="font-display font-black text-5xl text-white italic transform -skew-x-3 mt-2">
+            Welcome back, {user.username}
+          </h1>
+        </div>
       </header>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -107,4 +118,3 @@ export const Profile: React.FC = () => {
     </div>
   );
 };
-

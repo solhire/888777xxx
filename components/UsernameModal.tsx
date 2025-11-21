@@ -3,12 +3,13 @@ import { Button } from './Button';
 
 interface UsernameModalProps {
   isOpen: boolean;
-  onSubmit: (username: string) => Promise<void>;
+  onSubmit: (username: string, referralCode?: string) => Promise<void>;
   onCancel: () => void;
   title?: string;
   subtitle?: string;
   confirmLabel?: string;
   initialValue?: string;
+  initialReferralCode?: string | null;
 }
 
 export const UsernameModal: React.FC<UsernameModalProps> = ({
@@ -19,17 +20,21 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
   subtitle = 'Establish your identity on the network.',
   confirmLabel = 'CONFIRM',
   initialValue = '',
+  initialReferralCode = null,
 }) => {
   const [username, setUsername] = useState(initialValue);
+  const [referralCode, setReferralCode] = useState(initialReferralCode || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   React.useEffect(() => {
     if (isOpen) {
       setUsername(initialValue);
+      // Use the prop if it exists, otherwise keep local state or empty
+      setReferralCode(initialReferralCode || ''); 
       setError('');
     }
-  }, [isOpen, initialValue]);
+  }, [isOpen, initialValue, initialReferralCode]);
 
   if (!isOpen) return null;
 
@@ -48,7 +53,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     setError('');
 
     try {
-      await onSubmit(username);
+      await onSubmit(username, referralCode || undefined);
     } catch (err) {
       console.error(err);
       setError("Request failed. Please try again.");
@@ -81,8 +86,24 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
               maxLength={15}
               autoFocus
             />
-            {error && <p className="text-red-500 text-xs font-mono mt-2">{error}</p>}
           </div>
+
+          <div>
+            <label className="block text-xs font-mono text-z-steel-gray mb-2 uppercase tracking-wider">
+                Referral Code (Optional)
+            </label>
+            <input 
+              type="text" 
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+              placeholder="REF-CODE"
+              className="w-full bg-black/50 border border-z-steel-gray/30 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-z-violet-base transition-colors placeholder-z-steel-gray/30"
+              maxLength={8}
+              disabled={!!initialReferralCode} // Disable if it came from URL
+            />
+          </div>
+          
+          {error && <p className="text-red-500 text-xs font-mono mt-2">{error}</p>}
 
           <div className="flex gap-4">
              <Button 
@@ -101,4 +122,3 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     </div>
   );
 };
-

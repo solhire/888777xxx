@@ -1,5 +1,6 @@
 import { RewardClaim, LeaderboardEntry, Challenge, Clip, User } from '../types';
 
+// @ts-ignore
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 const storageKey = (walletAddress: string) => `zenth_user_${walletAddress}`;
 
@@ -41,10 +42,10 @@ class ApiService {
     return null; // User not found
   }
 
-  async registerUser(walletAddress: string, username: string, signature: string): Promise<User> {
+  async registerUser(walletAddress: string, username: string, signature: string, referredBy?: string): Promise<User> {
     // return this.request<User>('/users/register', {
     //   method: 'POST',
-    //   body: JSON.stringify({ walletAddress, username, signature }),
+    //   body: JSON.stringify({ walletAddress, username, signature, referredBy }),
     // });
     
     const newUser: User = {
@@ -54,11 +55,23 @@ class ApiService {
         xp: 0,
         tier: 'Unranked',
         isPremium: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        referralCode: Math.random().toString(36).substring(2, 10).toUpperCase(),
+        referredBy: referredBy || undefined,
+        referralCount: 0,
+        referralEarnings: 0
     };
 
     // Persist to localStorage to simulate DB save
     localStorage.setItem(storageKey(walletAddress), JSON.stringify(newUser));
+
+    // Handle referral logic (mock)
+    if (referredBy) {
+       // In a real backend, we would look up the referrer by their referralCode and increment their count
+       console.log(`User registered with referral code: ${referredBy}`);
+       // Simulate updating referrer stats if they exist in local storage (tricky without a global DB)
+       // For now, we just track 'referredBy' on the new user.
+    }
     
     return newUser;
   }
@@ -101,6 +114,59 @@ class ApiService {
   async getClips(): Promise<Clip[]> {
     // return this.request<Clip[]>('/clips');
     return [];
+  }
+
+  // Votes
+  private getVotesKey() {
+    return 'zenth_votes';
+  }
+
+  private getUserVotesKey(walletAddress: string) {
+    return `zenth_user_votes_${walletAddress}`;
+  }
+
+  async getProposalVotes(proposalId: string): Promise<number> {
+    const votesData = localStorage.getItem(this.getVotesKey());
+    if (!votesData) return 0;
+    const votes = JSON.parse(votesData);
+    return votes[proposalId] || 0;
+  }
+
+  async getAllProposalVotes(): Promise<Record<string, number>> {
+    const votesData = localStorage.getItem(this.getVotesKey());
+    if (!votesData) return {};
+    return JSON.parse(votesData);
+  }
+
+  async hasUserVoted(walletAddress: string, proposalId: string): Promise<boolean> {
+    const userVotesData = localStorage.getItem(this.getUserVotesKey(walletAddress));
+    if (!userVotesData) return false;
+    const userVotes = JSON.parse(userVotesData);
+    return userVotes.includes(proposalId);
+  }
+
+  async castVote(walletAddress: string, proposalId: string): Promise<void> {
+    // Check if user already voted
+    const hasVoted = await this.hasUserVoted(walletAddress, proposalId);
+    if (hasVoted) {
+      throw new Error('You have already voted for this proposal');
+    }
+
+    // Get current votes
+    const votesData = localStorage.getItem(this.getVotesKey());
+    const votes = votesData ? JSON.parse(votesData) : {};
+    
+    // Increment vote count
+    votes[proposalId] = (votes[proposalId] || 0) + 1;
+    localStorage.setItem(this.getVotesKey(), JSON.stringify(votes));
+
+    // Track user's vote
+    const userVotesData = localStorage.getItem(this.getUserVotesKey(walletAddress));
+    const userVotes = userVotesData ? JSON.parse(userVotesData) : [];
+    if (!userVotes.includes(proposalId)) {
+      userVotes.push(proposalId);
+      localStorage.setItem(this.getUserVotesKey(walletAddress), JSON.stringify(userVotes));
+    }
   }
 }
 

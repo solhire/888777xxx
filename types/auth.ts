@@ -1,4 +1,4 @@
-import { PhantomProvider } from './types';
+import { PhantomProvider } from '../types';
 
 export interface User {
   walletAddress: string;
@@ -8,6 +8,10 @@ export interface User {
   tier: 'S' | 'A' | 'B' | 'C' | 'Unranked';
   isPremium: boolean;
   createdAt: string;
+  referralCode: string;
+  referredBy?: string;
+  referralCount: number;
+  referralEarnings: number;
 }
 
 export interface AuthState {
@@ -15,4 +19,3 @@ export interface AuthState {
   user: User | null;
   isLoading: boolean;
 }
-

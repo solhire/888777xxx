@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
 import { useToast } from '../context/ToastContext';
 import { signAuthenticationMessage } from '../services/walletService';
+import { api } from '../services/api';
 
 interface Proposal {
   id: string;
@@ -64,7 +65,7 @@ const initialProposals: Proposal[] = [
   },
 ];
 
-const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isVoting: boolean }> = ({ proposal, onVote, isVoting }) => (
+const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isVoting: boolean; hasVoted: boolean }> = ({ proposal, onVote, isVoting, hasVoted }) => (
   <div className="group relative bg-z-obsidian/40 border border-z-steel-gray/20 p-6 overflow-hidden hover:border-z-violet-base/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(106,0,255,0.15)] hover:-translate-y-1 backdrop-blur-sm flex flex-col h-full">
     {/* Holographic sheen effect */}
     <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -103,9 +104,9 @@ const VoteCard: React.FC<{ proposal: Proposal; onVote: (id: string) => void; isV
         onClick={() => onVote(proposal.id)}
         variant="outline" 
         className="w-full group-hover:bg-z-violet-base group-hover:text-white group-hover:border-transparent transition-all"
-        disabled={isVoting}
+        disabled={isVoting || hasVoted}
       >
-        {isVoting ? 'VERIFYING...' : 'CAST VOTE'}
+        {isVoting ? 'VERIFYING...' : hasVoted ? 'VOTE CAST' : 'CAST VOTE'}
       </Button>
     </div>
   </div>
@@ -116,6 +117,39 @@ export const Vote: React.FC = () => {
   const { pushToast } = useToast();
   const [proposals, setProposals] = useState(initialProposals);
   const [votingId, setVotingId] = useState<string | null>(null);
+  const [userVotedProposals, setUserVotedProposals] = useState<Set<string>>(new Set());
+
+  // Load votes on mount
+  useEffect(() => {
+    const loadVotes = async () => {
+      try {
+        const allVotes = await api.getAllProposalVotes();
+        const totalVotes = Object.values(allVotes).reduce((sum, count) => sum + count, 0);
+
+        setProposals(prev => prev.map(p => {
+          const votes = allVotes[p.id] || 0;
+          const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+          return { ...p, currentVotes: votes, percentage };
+        }));
+
+        // Check if user has voted
+        if (user?.walletAddress) {
+          const votedSet = new Set<string>();
+          for (const proposal of initialProposals) {
+            const hasVoted = await api.hasUserVoted(user.walletAddress, proposal.id);
+            if (hasVoted) {
+              votedSet.add(proposal.id);
+            }
+          }
+          setUserVotedProposals(votedSet);
+        }
+      } catch (error) {
+        console.error('Failed to load votes:', error);
+      }
+    };
+
+    loadVotes();
+  }, [user]);
 
   const handleVote = async (id: string) => {
     if (!user) {
@@ -123,27 +157,41 @@ export const Vote: React.FC = () => {
       return;
     }
 
+    // Check if already voted
+    if (userVotedProposals.has(id)) {
+      pushToast({ message: 'You have already voted for this proposal.', variant: 'error' });
+      return;
+    }
+
     setVotingId(id);
 
     try {
-      // Simulate signature request
+      // Sign message to prove ownership
       const message = `Vote for proposal ${id} with wallet ${user.walletAddress}`;
       const result = await signAuthenticationMessage(message);
 
       if (result) {
-        // Optimistic update
+        // Save vote to localStorage
+        await api.castVote(user.walletAddress, id);
+
+        // Reload all votes to recalculate percentages
+        const allVotes = await api.getAllProposalVotes();
+        const totalVotes = Object.values(allVotes).reduce((sum, count) => sum + count, 0);
+
         setProposals(prev => prev.map(p => {
-          if (p.id === id) {
-            return { ...p, currentVotes: p.currentVotes + 1 }; // Simplified logic
-          }
-          return p;
+          const votes = allVotes[p.id] || 0;
+          const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+          return { ...p, currentVotes: votes, percentage };
         }));
+
+        // Mark as voted
+        setUserVotedProposals(prev => new Set(prev).add(id));
 
         pushToast({ message: 'Consensus Verified. Vote Logged.', variant: 'success' });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      pushToast({ message: 'Vote cancelled or failed.', variant: 'error' });
+      pushToast({ message: error.message || 'Vote cancelled or failed.', variant: 'error' });
     } finally {
       setVotingId(null);
     }
@@ -175,6 +223,7 @@ export const Vote: React.FC = () => {
                         proposal={p} 
                         onVote={handleVote} 
                         isVoting={votingId === p.id}
+                        hasVoted={userVotedProposals.has(p.id)}
                     />
                 ))}
             </div>
@@ -194,6 +243,7 @@ export const Vote: React.FC = () => {
                         proposal={p} 
                         onVote={handleVote} 
                         isVoting={votingId === p.id}
+                        hasVoted={userVotedProposals.has(p.id)}
                     />
                 ))}
             </div>
