@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
-import { ZShard } from './ZShard';
+import { NexilMark } from './NexilMark';
 
 interface PasswordProtectionProps {
   children: React.ReactNode;
@@ -43,8 +43,8 @@ export const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children
 
       <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-fade-in-up">
         <div className="flex justify-center mb-6">
-           <div className="w-16 h-16 text-z-violet-base animate-pulse">
-             <ZShard />
+           <div className="w-16 h-16 text-white animate-pulse">
+             <NexilMark />
            </div>
         </div>
         
