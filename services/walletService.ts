@@ -2,8 +2,8 @@ import { PhantomProvider } from '../types';
 import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from '@solana/web3.js';
 
 // You might want to make this configurable via environment variables later
-// Using 'devnet' for development, 'mainnet-beta' for production
-const SOLANA_NETWORK = 'devnet'; 
+// Using 'mainnet-beta' to check real wallet balances
+const SOLANA_NETWORK = 'mainnet-beta'; 
 const connection = new Connection(clusterApiUrl(SOLANA_NETWORK));
 
 export const getProvider = (): PhantomProvider | undefined => {

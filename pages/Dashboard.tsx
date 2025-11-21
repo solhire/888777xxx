@@ -230,7 +230,7 @@ export const Dashboard: React.FC = () => {
           <div className="bg-z-obsidian border border-z-steel-gray/20 p-6">
             <h3 className="text-z-steel-gray text-xs font-bold uppercase mb-4">Wallet Balance</h3>
             <div className="text-4xl font-display font-bold text-white">
-              {balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} 
+              {balance.toFixed(4).replace(/\.?0+$/, '').replace(/(\.\d{1,2})0+$/, '$1') || '0.00'}
               <span className="text-z-violet-base ml-2">SOL</span>
             </div>
           </div>
