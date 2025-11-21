@@ -1,26 +1,13 @@
 import React from 'react';
 
-export const NexilMark: React.FC<{ className?: string }> = ({ className }) => (
-  <svg
-    viewBox="0 0 120 120"
+export const ZShard: React.FC<{ className?: string }> = ({ className }) => (
+  <svg 
+    viewBox="0 0 1080 1080" 
+    fill="none" 
     className={className}
-    role="img"
-    aria-label="NEXIL mark"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <defs>
-      <linearGradient id="nexil-accent" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#7F66FF" />
-        <stop offset="100%" stopColor="#4C2CFF" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M14 14v92h34l24-46v46h34V14H76L52 60V14H14Z"
-      fill="currentColor"
-    />
-    <path
-      d="M38 80l26-45 26 45-26 25z"
-      fill="url(#nexil-accent)"
-    />
+    <path d="M250.692 216L135 882.414H336.03L375.521 795.098L322.518 525.938L653.97 896.727L866.958 828.375L915 266.934L672.71 185L629.948 587.532L351.521 277.215L250.692 216Z" fill="#1A1A1A"/>
+    <path d="M336.03 882.414L301.41 706.644L653.97 896.727L795.888 867.86L336.03 525.938V882.414Z" fill="#573CFF"/>
   </svg>
 );

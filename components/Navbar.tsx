@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { NexilMark } from './NexilMark';
+import { ZShard } from './NexilMark';
 import { Button } from './Button';
 import { useUser } from '../context/UserContext';
 import { UsernameModal } from './UsernameModal';
@@ -103,8 +103,8 @@ export const Navbar: React.FC = () => {
             
             {/* Left: Brand */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 text-z-onyx group-hover:text-white transition-colors duration-300 transform -skew-x-6 group-hover:rotate-6">
-                 <NexilMark />
+              <div className="w-8 h-8 text-z-violet-base group-hover:text-z-violet-peak transition-colors duration-300 transform -skew-x-6 group-hover:rotate-12 transition-transform">
+                 <ZShard />
               </div>
               <span className="font-display font-black text-2xl tracking-tighter italic text-white transform -skew-x-6">
                 NEXIL
