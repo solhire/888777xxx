@@ -137,21 +137,38 @@ export const Profile: React.FC = () => {
               </div>
             </div>
 
-            {/* Stats Card */}
-            <div className="bg-gradient-to-br from-z-obsidian to-z-violet-base/5 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
-              <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">STATISTICS</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10">
-                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Level</p>
-                  <p className="text-3xl font-display text-white">{user.level}</p>
+            {/* Stats Card - Retro Tech Style */}
+            <div className="bg-z-obsidian border-2 border-white/20 p-6 backdrop-blur-sm relative overflow-hidden">
+              {/* Scanline effect */}
+              <div className="absolute inset-0 opacity-5 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white to-transparent h-full animate-pulse" style={{ animationDuration: '3s' }}></div>
+              </div>
+              
+              <h2 className="text-z-violet-peak font-mono font-bold text-xl mb-6 tracking-wider" style={{ textShadow: '0 0 10px rgba(180,108,255,0.5)' }}>
+                STATISTICS
+              </h2>
+              
+              <div className="space-y-4 relative z-10">
+                {/* Level and Tier Row */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="border-2 border-white/30 bg-black/40 p-4">
+                    <p className="text-xs text-white font-mono uppercase mb-2 tracking-wider">LEVEL</p>
+                    <p className="text-4xl font-mono text-white font-bold" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.8)' }}>
+                      {user.level || '—'}
+                    </p>
+                  </div>
+                  <div className="border-2 border-white/30 bg-black/40 p-4">
+                    <p className="text-xs text-white font-mono uppercase mb-2 tracking-wider">TIER</p>
+                    <p className="text-2xl font-mono text-white font-bold" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.8)' }}>
+                      {user.tier === 'Unranked' || !user.tier ? 'Unranked' : `Tier ${user.tier}`}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10">
-                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Tier</p>
-                  <p className="text-3xl font-display text-white">{user.tier}</p>
-                </div>
-                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10 col-span-2">
-                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Member Since</p>
-                  <p className="text-lg text-white font-mono">
+                
+                {/* Member Since - Full Width */}
+                <div className="border-2 border-white/30 bg-black/40 p-4">
+                  <p className="text-xs text-white font-mono uppercase mb-2 tracking-wider">MEMBER SINCE</p>
+                  <p className="text-xl font-mono text-white font-bold" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.8)' }}>
                     {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </p>
                 </div>
@@ -159,31 +176,8 @@ export const Profile: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column - Connections & Links */}
-          <div className="md:col-span-2 space-y-6">
-            {/* Connections Card */}
-            <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
-              <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">CONNECTIONS</h2>
-              <p className="text-z-steel-gray text-sm font-mono mb-6">
-                Link your social and game clients to verify ownership. Supported integrations: Riot, Steam, Discord, and Faceit.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
-                  LINK DISCORD
-                </Button>
-                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
-                  LINK STEAM
-                </Button>
-                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
-                  LINK RIOT
-                </Button>
-                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
-                  LINK FACEIT
-                </Button>
-              </div>
-            </div>
-
-            {/* Quick Links */}
+          {/* Right Column - Quick Links */}
+          <div className="md:col-span-2">
             <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
               <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">QUICK LINKS</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
