@@ -104,11 +104,11 @@ export const Navbar: React.FC = () => {
             {/* Left: Brand */}
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-8 h-8 text-z-violet-base group-hover:text-z-violet-peak transition-colors duration-300 transform -skew-x-6 group-hover:rotate-12 transition-transform">
-                 <img src="/nexil1.png" alt="Logo" className="w-full h-full object-contain" />
+                 <ZShard />
               </div>
-              <span className="font-display font-black text-2xl tracking-tighter italic text-white transform -skew-x-6">
-                NEXIL
-              </span>
+              <div className="h-6 w-auto transform -skew-x-6">
+                <img src="/nexil_text_logo.png" alt="NEXIL" className="h-full w-auto object-contain" />
+              </div>
             </Link>
 
             {/* Center: Links (Desktop) */}
