@@ -43,8 +43,8 @@ export const PasswordProtection: React.FC<PasswordProtectionProps> = ({ children
 
       <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-fade-in-up">
         <div className="flex justify-center mb-6">
-           <div className="w-16 h-16 text-z-violet-base animate-pulse">
-             <ZShard />
+           <div className="w-24 h-24 text-z-violet-base animate-pulse">
+             <img src="/nexil1.png" alt="Logo" className="w-full h-full object-contain" />
            </div>
         </div>
         
