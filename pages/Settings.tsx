@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
 import { useToast } from '../context/ToastContext';
@@ -12,31 +12,76 @@ const Toggle: React.FC<{ checked: boolean; onChange: (val: boolean) => void }> =
   </button>
 );
 
+const STORAGE_KEY = 'zenth_settings';
+
+interface SettingsData {
+  notifications: {
+    matchReady: boolean;
+    tournamentUpdates: boolean;
+  };
+  privacy: {
+    publicProfile: boolean;
+    showMatchHistory: boolean;
+  };
+  display: {
+    animations: boolean;
+  };
+}
+
+const defaultSettings: SettingsData = {
+  notifications: {
+    matchReady: true,
+    tournamentUpdates: true,
+  },
+  privacy: {
+    publicProfile: true,
+    showMatchHistory: true,
+  },
+  display: {
+    animations: true,
+  },
+};
+
 export const Settings: React.FC = () => {
   const { user, isAuthenticated, login } = useUser();
   const { pushToast } = useToast();
 
-  const [notifications, setNotifications] = useState({
-    email: true,
-    matchReady: true,
-    tournamentUpdates: true,
-    marketing: false,
-  });
+  const [settings, setSettings] = useState<SettingsData>(defaultSettings);
+  const [hasChanges, setHasChanges] = useState(false);
 
-  const [privacy, setPrivacy] = useState({
-    publicProfile: true,
-    showMatchHistory: true,
-  });
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setSettings({ ...defaultSettings, ...parsed });
+      } catch (e) {
+        console.error('Failed to load settings:', e);
+      }
+    }
+  }, []);
 
-  const [display, setDisplay] = useState({
-    theme: 'dark', // dark | light
-    language: 'en', // en | es | fr | de
-    animations: true,
-  });
+  // Apply reduce motion setting
+  useEffect(() => {
+    if (!settings.display.animations) {
+      document.documentElement.style.setProperty('--animation-duration', '0s');
+      document.body.classList.add('reduce-motion');
+    } else {
+      document.documentElement.style.removeProperty('--animation-duration');
+      document.body.classList.remove('reduce-motion');
+    }
+  }, [settings.display.animations]);
+
+  const updateSettings = (updates: Partial<SettingsData>) => {
+    setSettings(prev => ({ ...prev, ...updates }));
+    setHasChanges(true);
+  };
 
   const handleSave = () => {
-    // In a real app, save to backend
-    pushToast({ message: 'Settings updated successfully', variant: 'success' });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    setHasChanges(false);
+    pushToast({ message: 'Settings saved successfully', variant: 'success' });
   };
 
   if (!isAuthenticated || !user) {
@@ -75,7 +120,10 @@ export const Settings: React.FC = () => {
                 <h3 className="text-white font-bold">Match Ready Alerts</h3>
                 <p className="text-z-steel-gray text-sm font-mono">Get notified when your opponent joins the lobby.</p>
               </div>
-              <Toggle checked={notifications.matchReady} onChange={(v) => setNotifications({...notifications, matchReady: v})} />
+              <Toggle 
+                checked={settings.notifications.matchReady} 
+                onChange={(v) => updateSettings({ notifications: { ...settings.notifications, matchReady: v } })} 
+              />
             </div>
 
             <div className="flex items-center justify-between">
@@ -83,15 +131,10 @@ export const Settings: React.FC = () => {
                 <h3 className="text-white font-bold">Tournament Updates</h3>
                 <p className="text-z-steel-gray text-sm font-mono">Bracket changes, delays, and prize pool adjustments.</p>
               </div>
-              <Toggle checked={notifications.tournamentUpdates} onChange={(v) => setNotifications({...notifications, tournamentUpdates: v})} />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-bold">Email Digests</h3>
-                <p className="text-z-steel-gray text-sm font-mono">Weekly performance summary and earnings report.</p>
-              </div>
-              <Toggle checked={notifications.email} onChange={(v) => setNotifications({...notifications, email: v})} />
+              <Toggle 
+                checked={settings.notifications.tournamentUpdates} 
+                onChange={(v) => updateSettings({ notifications: { ...settings.notifications, tournamentUpdates: v } })} 
+              />
             </div>
           </div>
         </section>
@@ -109,7 +152,10 @@ export const Settings: React.FC = () => {
                 <h3 className="text-white font-bold">Public Profile</h3>
                 <p className="text-z-steel-gray text-sm font-mono">Allow other users to view your profile and stats.</p>
               </div>
-              <Toggle checked={privacy.publicProfile} onChange={(v) => setPrivacy({...privacy, publicProfile: v})} />
+              <Toggle 
+                checked={settings.privacy.publicProfile} 
+                onChange={(v) => updateSettings({ privacy: { ...settings.privacy, publicProfile: v } })} 
+              />
             </div>
 
             <div className="flex items-center justify-between">
@@ -117,7 +163,10 @@ export const Settings: React.FC = () => {
                 <h3 className="text-white font-bold">Match History Visibility</h3>
                 <p className="text-z-steel-gray text-sm font-mono">Keep your recent match results public.</p>
               </div>
-              <Toggle checked={privacy.showMatchHistory} onChange={(v) => setPrivacy({...privacy, showMatchHistory: v})} />
+              <Toggle 
+                checked={settings.privacy.showMatchHistory} 
+                onChange={(v) => updateSettings({ privacy: { ...settings.privacy, showMatchHistory: v } })} 
+              />
             </div>
           </div>
         </section>
@@ -132,56 +181,24 @@ export const Settings: React.FC = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-white font-bold">Language</h3>
-                <p className="text-z-steel-gray text-sm font-mono">Select your preferred interface language.</p>
-              </div>
-              <select 
-                value={display.language}
-                onChange={(e) => setDisplay({...display, language: e.target.value})}
-                className="bg-black/50 border border-z-steel-gray/30 text-white px-4 py-2 font-mono focus:border-z-violet-base outline-none"
-              >
-                <option value="en">English (US)</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="jp">日本語</option>
-              </select>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-bold">Theme</h3>
-                <p className="text-z-steel-gray text-sm font-mono">Select visual theme (Cyberpunk Default).</p>
-              </div>
-              <div className="flex gap-2">
-                 <button 
-                    onClick={() => setDisplay({...display, theme: 'dark'})}
-                    className={`px-4 py-2 border ${display.theme === 'dark' ? 'bg-z-violet-base text-black border-z-violet-base' : 'bg-transparent text-z-steel-gray border-z-steel-gray/30'} font-mono text-xs uppercase`}
-                 >
-                    DARK
-                 </button>
-                 <button 
-                    onClick={() => setDisplay({...display, theme: 'light'})}
-                    className={`px-4 py-2 border ${display.theme === 'light' ? 'bg-white text-black border-white' : 'bg-transparent text-z-steel-gray border-z-steel-gray/30'} font-mono text-xs uppercase`}
-                 >
-                    LIGHT
-                 </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
                 <h3 className="text-white font-bold">Reduce Motion</h3>
-                <p className="text-z-steel-gray text-sm font-mono">Disable heavy animations and particle effects.</p>
+                <p className="text-z-steel-gray text-sm font-mono">Disable heavy animations and particle effects for better performance.</p>
               </div>
-              <Toggle checked={!display.animations} onChange={(v) => setDisplay({...display, animations: !v})} />
+              <Toggle 
+                checked={!settings.display.animations} 
+                onChange={(v) => updateSettings({ display: { ...settings.display, animations: !v } })} 
+              />
             </div>
           </div>
         </section>
 
         <div className="flex justify-end pt-8">
-            <Button onClick={handleSave} className="w-full md:w-auto">
-                SAVE CONFIGURATION
+            <Button 
+              onClick={handleSave} 
+              className="w-full md:w-auto"
+              disabled={!hasChanges}
+            >
+                {hasChanges ? 'SAVE CONFIGURATION' : 'SAVED'}
             </Button>
         </div>
 

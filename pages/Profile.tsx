@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { UsernameModal } from '../components/UsernameModal';
 import { useToast } from '../context/ToastContext';
 import Avatar from 'boring-avatars';
 
-const formatAddress = (addr: string) => `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
 export const Profile: React.FC = () => {
   const { user, updateUsername, isAuthenticated, login } = useUser();
@@ -15,6 +16,9 @@ export const Profile: React.FC = () => {
   if (!isAuthenticated || !user) {
     return (
       <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center text-center px-4">
+        <div className="w-24 h-24 bg-z-steel-gray/10 rounded-full flex items-center justify-center mb-6 animate-pulse">
+          <span className="text-4xl">🔒</span>
+        </div>
         <h1 className="text-4xl font-display text-white italic mb-4">PROFILE LOCKED</h1>
         <p className="text-z-onyx font-mono mb-6">Connect your Phantom wallet to manage your identity.</p>
         <Button onClick={login}>CONNECT PHANTOM</Button>
@@ -22,83 +26,190 @@ export const Profile: React.FC = () => {
     );
   }
 
+  // XP Calculation
+  const nextLevelXp = (user.level + 1) * 1000;
+  const xpProgress = Math.min((user.xp / nextLevelXp) * 100, 100);
+
   return (
-    <div className="pt-48 pb-20 min-h-screen max-w-4xl mx-auto px-4">
-      <header className="mb-10 flex flex-col md:flex-row items-center md:items-end gap-6">
-        <div className="w-24 h-24 rounded-full border-2 border-z-violet-base shadow-[0_0_20px_rgba(106,0,255,0.4)] overflow-hidden">
-           <Avatar
-             size={96}
-             name={user.walletAddress}
-             variant="beam"
-             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
-           />
-        </div>
-        <div>
-          <p className="text-xs font-mono text-z-violet-base uppercase tracking-[0.3em]">Control Room</p>
-          <h1 className="font-display font-black text-5xl text-white italic transform -skew-x-3 mt-2">
-            Welcome back, {user.username}
-          </h1>
-        </div>
-      </header>
+    <div className="pt-48 pb-20 min-h-screen max-w-6xl mx-auto px-4">
+      {/* Background Effects */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-z-violet-base/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-z-violet-peak/10 rounded-full blur-[120px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+      </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 space-y-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs text-z-onyx uppercase font-mono">Codename</p>
-              <p className="text-3xl font-display text-white">{user.username}</p>
+      <div className="relative z-10">
+        {/* Header Section */}
+        <header className="mb-12 opacity-0 animate-fade-in-up">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full border-4 border-z-violet-base/50 shadow-[0_0_30px_rgba(106,0,255,0.5)] overflow-hidden bg-z-obsidian p-1">
+                <Avatar
+                  size={120}
+                  name={user.walletAddress}
+                  variant="beam"
+                  colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+                />
+              </div>
+              {user.walletAddress === "4nW6MkoZbLuTouoqvRzoZWCyFVypCKu9R3wRCxZZCTkV" && (
+                <div className="absolute -bottom-2 -right-2 bg-z-violet-base rounded-full p-1.5 border-2 border-z-obsidian">
+                  <img src="/verif.png" alt="Verified" className="w-6 h-6" title="Verified Official" />
+                </div>
+              )}
             </div>
-            <Button size="sm" variant="outline" onClick={() => setShowEditModal(true)}>
-              CHANGE
-            </Button>
-          </div>
 
-          <div>
-            <p className="text-xs text-z-onyx uppercase font-mono mb-1">Wallet</p>
-            <div className="flex items-center gap-2">
-              <span className="text-white font-mono">{formatAddress(user.walletAddress)}</span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(user.walletAddress);
-                  pushToast({ message: 'Wallet address copied', variant: 'info' });
-                }}
-              >
-                COPY
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="border border-z-steel-gray/20 py-3">
-              <p className="text-xs text-z-onyx">Level</p>
-              <p className="text-2xl text-white font-display">{user.level}</p>
-            </div>
-            <div className="border border-z-steel-gray/20 py-3">
-              <p className="text-xs text-z-onyx">Tier</p>
-              <p className="text-2xl text-white font-display">{user.tier}</p>
-            </div>
-            <div className="border border-z-steel-gray/20 py-3">
-              <p className="text-xs text-z-onyx">Joined</p>
-              <p className="text-lg text-white font-mono">
-                {new Date(user.createdAt).toLocaleDateString()}
+            {/* User Info */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <h1 className="font-display font-black text-5xl md:text-6xl text-white italic transform -skew-x-3">
+                  {user.username}
+                </h1>
+              </div>
+              <p className="text-z-steel-gray font-mono text-sm mb-4">
+                {formatAddress(user.walletAddress)}
               </p>
+              <div className="flex items-center justify-center md:justify-start gap-3">
+                <span className="bg-z-violet-base/20 text-z-violet-peak px-3 py-1 text-xs font-bold border border-z-violet-base/30 rounded">
+                  LVL {user.level}
+                </span>
+                <span className="bg-z-steel-gray/10 text-z-steel-gray px-3 py-1 text-xs font-bold border border-z-steel-gray/30 rounded">
+                  {user.isPremium ? 'PREMIUM' : 'STANDARD'}
+                </span>
+                <span className="bg-z-steel-gray/10 text-z-steel-gray px-3 py-1 text-xs font-bold border border-z-steel-gray/30 rounded">
+                  TIER {user.tier}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 space-y-4">
-          <h2 className="text-2xl font-display text-white">Connections</h2>
-          <p className="text-z-onyx text-sm font-mono">
-            Link your social and game clients to verify ownership. Coming soon: Riot, Steam, Discord, and Faceit.
-          </p>
-          <Button disabled className="w-full bg-z-steel-gray/20 text-z-steel-gray border-z-steel-gray/40">
-            LINK DISCORD (SOON)
-          </Button>
-          <Button disabled className="w-full bg-z-steel-gray/20 text-z-steel-gray border-z-steel-gray/40">
-            LINK STEAM (SOON)
-          </Button>
+          {/* XP Progress Bar */}
+          <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
+            <div className="flex justify-between text-xs text-z-steel-gray font-mono mb-2">
+              <span>XP {user.xp.toLocaleString()}</span>
+              <span>{nextLevelXp.toLocaleString()} XP</span>
+            </div>
+            <div className="w-full h-3 bg-z-steel-gray/10 rounded-full overflow-hidden border border-z-steel-gray/10">
+              <div 
+                className="h-full bg-gradient-to-r from-z-violet-base to-z-violet-peak transition-all duration-500 shadow-[0_0_10px_rgba(180,108,255,0.5)]"
+                style={{ width: `${xpProgress}%` }}
+              ></div>
+            </div>
+            <div className="text-right text-xs text-z-steel-gray font-mono mt-1">
+              {Math.floor(xpProgress)}% to Level {user.level + 1}
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Grid */}
+        <div className="grid md:grid-cols-3 gap-6 opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+          {/* Left Column - Identity */}
+          <div className="md:col-span-1 space-y-6">
+            <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm hover:border-z-violet-base/30 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-z-violet-peak font-display font-bold text-lg italic">IDENTITY</h2>
+                <Button size="sm" variant="outline" onClick={() => setShowEditModal(true)}>
+                  EDIT
+                </Button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Codename</p>
+                  <p className="text-2xl font-display text-white">{user.username}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Wallet Address</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-mono text-sm break-all">{user.walletAddress}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        navigator.clipboard.writeText(user.walletAddress);
+                        pushToast({ message: 'Wallet address copied', variant: 'info' });
+                      }}
+                      className="flex-shrink-0"
+                    >
+                      COPY
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Card */}
+            <div className="bg-gradient-to-br from-z-obsidian to-z-violet-base/5 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
+              <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">STATISTICS</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10">
+                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Level</p>
+                  <p className="text-3xl font-display text-white">{user.level}</p>
+                </div>
+                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10">
+                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Tier</p>
+                  <p className="text-3xl font-display text-white">{user.tier}</p>
+                </div>
+                <div className="text-center p-3 bg-z-obsidian/40 rounded border border-z-steel-gray/10 col-span-2">
+                  <p className="text-xs text-z-steel-gray font-mono uppercase mb-1">Member Since</p>
+                  <p className="text-lg text-white font-mono">
+                    {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Connections & Links */}
+          <div className="md:col-span-2 space-y-6">
+            {/* Connections Card */}
+            <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
+              <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">CONNECTIONS</h2>
+              <p className="text-z-steel-gray text-sm font-mono mb-6">
+                Link your social and game clients to verify ownership. Supported integrations: Riot, Steam, Discord, and Faceit.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
+                  LINK DISCORD
+                </Button>
+                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
+                  LINK STEAM
+                </Button>
+                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
+                  LINK RIOT
+                </Button>
+                <Button disabled className="w-full bg-z-steel-gray/10 text-z-steel-gray border-z-steel-gray/30 hover:bg-z-steel-gray/20">
+                  LINK FACEIT
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="bg-z-obsidian/60 border border-z-steel-gray/20 p-6 rounded-lg backdrop-blur-sm">
+              <h2 className="text-z-violet-peak font-display font-bold text-lg italic mb-4">QUICK LINKS</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Link to="/dashboard">
+                  <Button variant="outline" className="w-full justify-start">
+                    DASHBOARD
+                  </Button>
+                </Link>
+                <Link to="/referrals">
+                  <Button variant="outline" className="w-full justify-start">
+                    REFERRALS
+                  </Button>
+                </Link>
+                <Link to="/settings">
+                  <Button variant="outline" className="w-full justify-start">
+                    SETTINGS
+                  </Button>
+                </Link>
+                <Link to="/tournaments">
+                  <Button variant="outline" className="w-full justify-start">
+                    TOURNAMENTS
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

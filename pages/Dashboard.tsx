@@ -1,46 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { RewardClaimModal } from '../components/RewardClaimModal';
-import { signAuthenticationMessage } from '../services/walletService';
 import { api } from '../services/api';
 import { RewardClaim } from '../types';
 import { useUser } from '../context/UserContext';
 import Avatar from 'boring-avatars';
 
-// Helper for hex string
-const toHexString = (byteArray: Uint8Array) => {
-  return Array.from(byteArray, function(byte) {
-    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-  }).join('')
-}
-
-// Placeholder token address (to be updated by user later)
-const ZENTH_TOKEN_ADDRESS = "TokenAddressToByProvidedByUser"; 
 
 export const Dashboard: React.FC = () => {
   const { user, isAuthenticated, login, isLoading: isAuthLoading } = useUser();
   const [rewards, setRewards] = useState<RewardClaim[]>([]);
-  const [claimingId, setClaimingId] = useState<string | null>(null);
   const [isDataLoading, setIsDataLoading] = useState(false);
-  const [isCheckingHoldings, setIsCheckingHoldings] = useState(false);
-  const [holderRewardClaimed, setHolderRewardClaimed] = useState(false);
-  
-  // Reward claim modal state
-  const [claimModal, setClaimModal] = useState<{
-    isOpen: boolean;
-    rewardId: string | null;
-    rewardTitle: string;
-    rewardAmount: string;
-    status: 'pending' | 'signing' | 'success' | 'error';
-    errorMessage?: string;
-  }>({
-    isOpen: false,
-    rewardId: null,
-    rewardTitle: '',
-    rewardAmount: '',
-    status: 'pending',
-  });
 
   useEffect(() => {
     if (user && user.walletAddress) {
@@ -63,79 +33,7 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const openClaimModal = (id: string) => {
-    const reward = rewards.find(r => r.id === id);
-    if (!reward) return;
-    
-    setClaimModal({
-      isOpen: true,
-      rewardId: id,
-      rewardTitle: reward.title,
-      rewardAmount: `${reward.amountSol} SOL`,
-      status: 'pending',
-    });
-  };
 
-  const handleClaim = async () => {
-    if (!user?.walletAddress || !claimModal.rewardId) return;
-    
-    const rewardId = claimModal.rewardId;
-    setClaimingId(rewardId);
-    
-    try {
-      setClaimModal(prev => ({ ...prev, status: 'signing' }));
-      
-      const message = `Sign this message to claim reward ${rewardId}`;
-      const authResult = await signAuthenticationMessage(message);
-    
-      if (authResult) {
-        // Send signature to backend for verification and claim processing
-        const sigHex = toHexString(authResult.signature);
-        await api.claimReward(rewardId, sigHex);
-        
-        // Optimistic update
-        setRewards(prev => prev.map(r => r.id === rewardId ? { ...r, status: 'claimed' as const } : r));
-        
-        // Show success
-        setClaimModal(prev => ({ ...prev, status: 'success' }));
-      } else {
-        setClaimModal(prev => ({ 
-          ...prev, 
-          status: 'error',
-          errorMessage: 'Authentication cancelled or failed'
-        }));
-      }
-    } catch (error) {
-      console.error("Claim failed:", error);
-      setClaimModal(prev => ({ 
-        ...prev, 
-        status: 'error',
-        errorMessage: 'Failed to process claim. Please try again.'
-      }));
-    } finally {
-      setClaimingId(null);
-    }
-  };
-
-  const handleHolderClaim = async () => {
-     if (!user?.walletAddress) return;
-     setIsCheckingHoldings(true);
-     
-     try {
-        const message = `Claim Holder Reward for account ${user.walletAddress}`;
-        const authResult = await signAuthenticationMessage(message);
-        
-        if (authResult) {
-            setHolderRewardClaimed(true);
-            alert("Holder reward claimed successfully!");
-        }
-     } catch (e) {
-         console.error(e);
-         alert("Error claiming reward.");
-     } finally {
-         setIsCheckingHoldings(false);
-     }
-  };
 
   if (isAuthLoading) {
     return (
@@ -165,20 +63,6 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="pt-48 pb-20 min-h-screen max-w-6xl mx-auto px-4">
-      {/* Reward Claim Modal */}
-      <RewardClaimModal
-        isOpen={claimModal.isOpen}
-        rewardTitle={claimModal.rewardTitle}
-        rewardAmount={claimModal.rewardAmount}
-        status={claimModal.status}
-        errorMessage={claimModal.errorMessage}
-        onConfirm={handleClaim}
-        onClose={() => {
-          setClaimModal({ isOpen: false, rewardId: null, rewardTitle: '', rewardAmount: '', status: 'pending' });
-          setClaimingId(null);
-        }}
-      />
-      
       <div className="grid md:grid-cols-3 gap-8">
         
         {/* Left Column: Profile & Wallet */}
@@ -263,31 +147,6 @@ export const Dashboard: React.FC = () => {
             </Link>
           </div>
 
-          {/* Holder Rewards Card */}
-          <div className="bg-z-obsidian border border-z-violet-base/20 p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-z-violet-base/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            <h3 className="text-z-violet-peak text-xs font-bold uppercase mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 bg-z-violet-peak rounded-full animate-pulse"></span>
-                Holder Rewards
-            </h3>
-            <p className="text-z-steel-gray text-xs font-mono mb-4">
-                Hold SOL or $ZENTH to claim daily rewards.
-            </p>
-            {holderRewardClaimed ? (
-                <div className="text-center py-2 bg-z-violet-base/10 border border-z-violet-base/30 text-z-violet-peak font-bold text-sm rounded">
-                    REWARD CLAIMED
-                </div>
-            ) : (
-                <Button 
-                    size="sm" 
-                    className="w-full bg-z-violet-base/10 hover:bg-z-violet-base/20 border border-z-violet-base/50 text-z-violet-peak"
-                    onClick={handleHolderClaim}
-                    disabled={isCheckingHoldings}
-                >
-                    {isCheckingHoldings ? 'VERIFYING...' : 'CLAIM BONUS'}
-                </Button>
-            )}
-          </div>
         </div>
 
         {/* Right Column: Rewards Feed */}
@@ -316,20 +175,9 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
                   <div className="text-xl font-display font-bold text-z-violet-peak">{reward.amountSol} SOL</div>
-                  {reward.status === 'available' ? (
-                    <Button 
-                      size="sm" 
-                      onClick={() => openClaimModal(reward.id)}
-                      disabled={claimingId === reward.id}
-                      className="min-w-[100px]"
-                    >
-                      CLAIM
-                    </Button>
-                  ) : (
-                    <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
-                      CLAIMED
-                    </span>
-                  )}
+                  <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
+                    {reward.status === 'claimed' ? 'CLAIMED' : 'PENDING'}
+                  </span>
                 </div>
               </div>
             ))}
