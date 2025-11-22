@@ -26,6 +26,7 @@ export const Minigames: React.FC = () => {
                                ONLINE
                            </div>
                        </div>
+                    </div>
                 </div>
             </div>
         </div>
