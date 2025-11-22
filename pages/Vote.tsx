@@ -161,7 +161,7 @@ export const Vote: React.FC = () => {
 
     // Check if voting is open
     if (!isVotingOpen) {
-      pushToast({ message: 'Voting opens on Friday, November 21, 2025 at 2:00 PM EST.', variant: 'error' });
+      pushToast({ message: 'Voting opens on Sunday, November 23, 2025 at 2:00 PM EST.', variant: 'error' });
       return;
     }
 
@@ -250,7 +250,7 @@ export const Vote: React.FC = () => {
                       <span className="text-z-violet-peak font-bold">•</span> Duplicate votes from the same wallet will not be logged. Your first vote is final.
                     </p>
                     <p>
-                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Friday, November 21, 2025 at 2:00 PM EST</span>, when tournaments launch.
+                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Sunday, November 23, 2025 at 2:00 PM EST</span>, when tournaments launch.
                     </p>
                   </>
                 ) : (
@@ -262,7 +262,7 @@ export const Vote: React.FC = () => {
                       <span className="text-z-violet-peak font-bold">•</span> Duplicate votes from the same wallet will not be logged. Your first vote is final.
                     </p>
                     <p>
-                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Friday, November 21, 2025 at 2:00 PM EST</span>, when tournaments launch.
+                      <span className="text-z-violet-peak font-bold">•</span> Voting results will be announced on <span className="text-white font-bold">Sunday, November 23, 2025 at 2:00 PM EST</span>, when tournaments launch.
                     </p>
                   </>
                 )}

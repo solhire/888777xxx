@@ -10,8 +10,8 @@ export const VotingCountdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // November 21, 2025 at 2:00 PM EST (14:00)
-    const launchDate = new Date('2025-11-21T14:00:00-05:00').getTime();
+    // November 23, 2025 at 2:00 PM EST (14:00)
+    const launchDate = new Date('2025-11-23T14:00:00-05:00').getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -50,7 +50,7 @@ export const VotingCountdown: React.FC = () => {
     <div className="bg-gradient-to-r from-z-violet-base/20 via-z-violet-peak/20 to-z-violet-base/20 border border-z-violet-base/30 p-6 rounded-lg backdrop-blur-sm">
       <div className="text-center mb-4">
         <h3 className="text-z-violet-peak font-display font-bold text-lg italic mb-2">VOTING OPENS</h3>
-        <p className="text-z-steel-gray font-mono text-xs">Friday, November 21, 2025 at 2:00 PM EST</p>
+        <p className="text-z-steel-gray font-mono text-xs">Sunday, November 23, 2025 at 2:00 PM EST</p>
       </div>
       <div className="grid grid-cols-4 gap-4">
         {[
@@ -80,7 +80,7 @@ export const useVotingOpen = (): boolean => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const launchDate = new Date('2025-11-21T14:00:00-05:00').getTime();
+    const launchDate = new Date('2025-11-23T14:00:00-05:00').getTime();
     const checkVoting = () => {
       const now = new Date().getTime();
       setIsOpen(now >= launchDate);
