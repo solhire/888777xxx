@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    background-color: #030304;
+    color: #f8fafc;
+  }
+
+  body {
+    @apply bg-z-bg text-z-text-primary antialiased overflow-x-hidden selection:bg-z-violet-base/30 selection:text-white;
+  }
+
+  /* Modern Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-z-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-z-card rounded-full hover:bg-z-violet-base/50 transition-colors;
+  }
+}
+
+@layer components {
+  .container-fluid {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Cards */
+  .card-base {
+    @apply bg-z-card border border-white/5 rounded-xl p-6 transition-all duration-300 hover:border-white/10 relative overflow-hidden;
+  }
+  
+  .card-glass {
+    @apply bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-xl p-6 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10 shadow-xl shadow-black/20;
+  }
+
+  .card-hover-effect {
+    @apply hover:-translate-y-1 hover:shadow-2xl hover:shadow-z-violet-base/10;
+  }
+
+  /* Typography */
+  .heading-hero {
+    @apply font-display font-bold italic uppercase leading-[0.9] tracking-tighter;
+  }
+  
+  .heading-section {
+    @apply font-display font-bold italic uppercase tracking-wide text-3xl md:text-4xl lg:text-5xl text-white;
+  }
+
+  .text-gradient-primary {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-z-violet-base via-z-violet-peak to-white;
+  }
+  
+  .text-gradient-silver {
+    @apply text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60;
+  }
+
+  /* Buttons (Base styles, see Button.tsx for variants) */
+  .btn-base {
+    @apply inline-flex items-center justify-center font-display font-bold italic uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Navigation Links */
+  .nav-link {
+    @apply relative font-display text-sm uppercase tracking-widest text-z-text-secondary hover:text-white transition-colors duration-200;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 w-full h-px bg-z-violet-peak transform scale-x-0 transition-transform duration-300 origin-right;
+  }
+  .nav-link:hover::after {
+    @apply scale-x-100 origin-left;
+  }
+
+  /* Utilities */
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+  }
+}
+
+/* Global Animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Background Patterns */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}

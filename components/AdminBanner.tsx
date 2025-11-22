@@ -7,10 +7,12 @@ export const AdminBanner: React.FC = () => {
   if (!contractAddress) return null;
 
   return (
-    <div className="w-full bg-gradient-to-r from-z-violet-base via-z-violet-peak to-z-violet-base backdrop-blur-sm text-white py-1 px-4 text-center font-mono text-xs md:text-sm border-b border-z-violet-peak/50 shadow-[0_0_30px_rgba(180,108,255,0.6)] animate-fade-in relative z-40">
-      <span className="font-bold mr-2 drop-shadow-[0_0_8px_rgba(180,108,255,0.8)]">OFFICIAL CA:</span>
-      <span className="select-all drop-shadow-[0_0_6px_rgba(180,108,255,0.6)]">{contractAddress}</span>
+    <div className="w-full bg-gradient-to-r from-z-violet-base via-z-violet-peak to-z-violet-base backdrop-blur-sm text-white py-1.5 px-4 text-center font-mono text-[10px] md:text-xs tracking-widest border-b border-z-violet-peak/30 relative z-40 overflow-hidden">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+      <div className="relative z-10 flex items-center justify-center gap-2">
+        <span className="font-bold opacity-80">OFFICIAL CA:</span>
+        <span className="select-all font-bold text-white drop-shadow-md hover:text-z-bg transition-colors cursor-copy bg-white/10 px-2 py-0.5 rounded">{contractAddress}</span>
+      </div>
     </div>
   );
 };
-

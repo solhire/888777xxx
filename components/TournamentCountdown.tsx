@@ -10,8 +10,8 @@ export const TournamentCountdown: React.FC = () => {
   const [isLaunched, setIsLaunched] = useState(false);
 
   useEffect(() => {
-    // November 21, 2025 at 2:00 PM EST (14:00)
-    const launchDate = new Date('2025-11-21T14:00:00-05:00').getTime();
+    // November 23, 2025 at 2:00 PM EST (14:00)
+    const launchDate = new Date('2025-11-23T14:00:00-05:00').getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -36,41 +36,41 @@ export const TournamentCountdown: React.FC = () => {
 
   if (isLaunched) {
     return (
-      <div className="bg-gradient-to-r from-z-violet-base/20 via-z-violet-peak/20 to-z-violet-base/20 border border-z-violet-base/30 p-6 rounded-lg backdrop-blur-sm">
-        <div className="text-center">
-          <h3 className="text-z-violet-peak font-display font-bold text-xl italic mb-2">TOURNAMENTS LIVE</h3>
-          <p className="text-z-steel-gray font-mono text-sm">Registration is now open</p>
-        </div>
+      <div className="bg-z-violet-base/10 border border-z-violet-base/20 p-8 rounded-xl backdrop-blur-md text-center">
+        <h3 className="text-z-violet-peak font-display font-bold text-2xl italic mb-2 animate-pulse">TOURNAMENTS LIVE</h3>
+        <p className="text-z-text-secondary font-mono text-sm">Registration is now open</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-r from-z-violet-base/20 via-z-violet-peak/20 to-z-violet-base/20 border border-z-violet-base/30 p-6 rounded-lg backdrop-blur-sm">
-      <div className="text-center mb-4">
-        <h3 className="text-z-violet-peak font-display font-bold text-lg italic mb-2">TOURNAMENTS START</h3>
-        <p className="text-z-steel-gray font-mono text-xs">Friday, November 21, 2025 at 2:00 PM EST</p>
+    <div className="p-8 text-center">
+      <div className="mb-8">
+        <h3 className="text-z-violet-peak font-display font-bold text-2xl italic mb-2 tracking-wide">TOURNAMENTS START</h3>
+        <p className="text-z-text-secondary font-mono text-xs tracking-widest">SUNDAY, NOVEMBER 23, 2025 • 2:00 PM EST</p>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto">
         {[
           { label: 'DAYS', value: timeLeft.days },
           { label: 'HOURS', value: timeLeft.hours },
-          { label: 'MIN', value: timeLeft.minutes },
-          { label: 'SEC', value: timeLeft.seconds },
+          { label: 'MINS', value: timeLeft.minutes },
+          { label: 'SECS', value: timeLeft.seconds },
         ].map((item, index) => (
-          <div key={index} className="text-center">
-            <div className="bg-z-obsidian/50 border border-z-violet-base/20 p-4 rounded">
-              <div className="text-3xl font-display font-bold text-white italic mb-1">
+          <div key={index} className="relative group">
+            <div className="bg-z-bg border border-white/10 p-4 md:p-6 rounded-lg group-hover:border-z-violet-base/30 transition-all duration-300">
+              <div className="text-3xl md:text-5xl font-display font-black text-white italic mb-2 tabular-nums group-hover:text-z-violet-peak transition-colors">
                 {String(item.value).padStart(2, '0')}
               </div>
-              <div className="text-[10px] text-z-steel-gray font-mono uppercase tracking-wider">
+              <div className="text-[10px] md:text-xs text-z-text-muted font-mono uppercase tracking-widest">
                 {item.label}
               </div>
             </div>
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-z-violet-base/0 group-hover:border-z-violet-base/50 transition-all duration-300" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-z-violet-base/0 group-hover:border-z-violet-base/50 transition-all duration-300" />
           </div>
         ))}
       </div>
     </div>
   );
 };
-

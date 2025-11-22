@@ -22,10 +22,10 @@ import { Referrals } from './pages/Referrals';
 import { AdminProvider } from './context/AdminContext';
 
 const Footer: React.FC = () => (
-  <footer className="py-8 border-t border-z-steel-gray/20 bg-z-obsidian/50">
-    <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-z-steel-gray">
+  <footer className="py-8 border-t border-white/5 bg-z-bg relative z-10">
+    <div className="container-fluid flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-mono text-z-text-muted">
       <div>© 2025 NEXIL. All rights reserved.</div>
-      <div className="flex gap-6 flex-wrap justify-center">
+      <div className="flex gap-8 flex-wrap justify-center">
         <Link to="/faq" className="hover:text-z-violet-base transition-colors">FAQ</Link>
         <Link to="/terms" className="hover:text-z-violet-base transition-colors">TERMS OF SERVICE</Link>
         <Link to="/privacy" className="hover:text-z-violet-base transition-colors">PRIVACY POLICY</Link>
@@ -40,10 +40,12 @@ const App: React.FC = () => {
     <AdminProvider>
       <Router>
         <ScrollToTop />
-        <div className="bg-black min-h-screen flex flex-col text-white font-sans selection:bg-z-violet-base selection:text-white">
+        <div className="min-h-screen flex flex-col relative">
+           {/* Navbar is fixed, so no layout shift */}
           <Navbar />
           <ToastStack />
-          <div className="flex-grow pb-16 lg:pb-0">
+          
+          <main className="flex-grow pb-20 lg:pb-0 relative z-0">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/tournaments" element={<Tournaments />} />
@@ -60,7 +62,8 @@ const App: React.FC = () => {
               <Route path="/admin" element={<Admin />} />
               <Route path="/vote" element={<Vote />} />
             </Routes>
-          </div>
+          </main>
+          
           <Footer />
           <BottomNav />
         </div>

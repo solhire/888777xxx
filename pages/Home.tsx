@@ -1,38 +1,81 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { ZShard } from '../components/NexilMark';
 import { TournamentCountdown } from '../components/TournamentCountdown';
 import { useUser } from '../context/UserContext';
-import '../styles/howItWorks.css';
+import { UsernameModal } from '../components/UsernameModal';
+import { useToast } from '../context/ToastContext';
 
 export const Home: React.FC = () => {
-  const { user, isAuthenticated, login } = useUser();
+  const { user, isAuthenticated, login, register, logout } = useUser();
+  const { pushToast } = useToast();
+  const [searchParams] = useSearchParams();
+  const refCode = searchParams.get('ref');
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
   const isConnected = isAuthenticated && user;
 
+  const handleConnect = async () => {
+    if (isConnected) {
+      // Already connected, maybe redirect to dashboard?
+      // For now, we just return as the button usually changes to "Dashboard" when connected.
+      return;
+    }
+
+    const loggedInUser = await login();
+    const provider = window.solana;
+    
+    if (provider?.publicKey && !loggedInUser) {
+      // Connected but needs registration
+      setShowRegisterModal(true);
+    } else if (loggedInUser) {
+      pushToast({ message: `Signed in as ${loggedInUser.username}`, variant: 'success' });
+    }
+  };
+
   return (
-    <div className="min-h-screen pt-40">
+    <div className="min-h-screen pt-32 overflow-hidden">
+      <UsernameModal 
+        isOpen={showRegisterModal} 
+        initialValue=""
+        initialReferralCode={refCode}
+        onSubmit={async (username, referralCode) => {
+            await register(username, referralCode);
+            pushToast({ message: `Agent registered as ${username}`, variant: 'success' });
+            setShowRegisterModal(false);
+        }}
+        onCancel={async () => {
+            setShowRegisterModal(false);
+            await logout(); 
+        }}
+      />
+
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        {/* Abstract BG */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-z-violet-base/20 rounded-full blur-[120px] animate-pulse-slow" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '1s' }} />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+      <section className="relative min-h-[85vh] flex items-center justify-center">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-z-violet-base/10 rounded-full blur-[120px] animate-float" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-z-cyan/5 rounded-full blur-[100px] animate-float" style={{ animationDelay: '2s' }} />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
+          {/* Grid overlay */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-20 mask-gradient-radial"></div>
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
-          <div className="inline-block mb-6 animate-fade-in-up">
-             <ZShard className="w-16 h-16 text-z-violet-peak mx-auto drop-shadow-[0_0_10px_rgba(180,108,255,0.5)]" />
+        <div className="relative z-10 container-fluid text-center">
+          <div className="inline-block mb-8 animate-fade-in-up">
+             <ZShard className="w-20 h-20 text-z-violet-peak mx-auto drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]" />
           </div>
-          <h1 className="font-display font-black text-6xl md:text-8xl lg:text-9xl uppercase italic leading-[0.9] text-white tracking-tighter transform -skew-x-3 mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+          
+          <h1 className="heading-hero text-6xl md:text-8xl lg:text-9xl text-white mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
             Ascend To<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-z-violet-base to-z-violet-peak">Your Peak</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-z-violet-base via-z-violet-peak to-white">Your Peak</span>
           </h1>
-          <p className="text-z-onyx font-mono md:text-lg max-w-2xl mx-auto mb-12 uppercase tracking-widest opacity-0 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          
+          <p className="text-z-text-secondary font-mono md:text-lg max-w-2xl mx-auto mb-12 uppercase tracking-widest opacity-0 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
             {isConnected ? (
               <>
-                You are logged in as <span className="text-white">{user!.username}</span>. Resume your climb.
+                You are logged in as <span className="text-white font-bold">{user!.username}</span>. Resume your climb.
               </>
             ) : (
               <>
@@ -44,36 +87,43 @@ export const Home: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center opacity-0 animate-fade-in-up" style={{ animationDelay: '450ms' }}>
              {isConnected ? (
                <Link to="/dashboard">
-                 <Button size="lg" className="w-full md:w-auto shadow-[0_0_30px_rgba(106,0,255,0.3)] hover:scale-105 transition-transform duration-300 bg-z-violet-base text-white">
+                 <Button size="lg" variant="primary" className="min-w-[200px] shadow-lg shadow-z-violet-base/20">
                    Return to Dashboard
                  </Button>
                </Link>
              ) : (
                <Button
                  size="lg"
-                 className="w-full md:w-auto shadow-[0_0_30px_rgba(106,0,255,0.3)] hover:scale-105 transition-transform duration-300"
-                 onClick={login}
+                 variant="primary"
+                 className="min-w-[200px] shadow-lg shadow-z-violet-base/20"
+                 onClick={handleConnect}
                >
                  Connect Phantom
                </Button>
              )}
              <Link to="/tournaments">
-               <Button variant="outline" size="lg" className="w-full md:w-auto hover:scale-105 transition-transform duration-300">Explore Challenges</Button>
+               <Button variant="outline" size="lg" className="min-w-[200px]">Explore Challenges</Button>
              </Link>
           </div>
         </div>
       </section>
 
       {/* Tournament Countdown */}
-      <section className="max-w-4xl mx-auto px-4 mb-16">
-        <TournamentCountdown />
+      <section className="container-fluid max-w-5xl mx-auto px-4 mb-24 relative z-20">
+        <div className="card-glass border-z-violet-base/20">
+           <TournamentCountdown />
+        </div>
       </section>
 
       {/* How It Works */}
-      <section className="how-it-works-wrapper">
-        <div className="how-it-works">
-          <h2>HOW IT WORKS</h2>
-          <div className="hiw-track">
+      <section className="py-24 relative border-y border-white/5 bg-black/50 backdrop-blur-sm">
+        <div className="container-fluid max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="heading-section mb-4">HOW IT WORKS</h2>
+            <div className="h-1 w-24 bg-z-violet-base mx-auto rounded-full"></div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 title: 'Authenticate',
@@ -96,11 +146,18 @@ export const Home: React.FC = () => {
                 copy: 'Winners receive payouts after match verification. Funds are released from escrow via smart contract once results are confirmed.',
               },
             ].map((step, index) => (
-              <div className="hiw-step" key={step.title}>
-                <div className="hiw-step-index">0{index + 1}</div>
-                <div className="hiw-step-title">{step.title}</div>
-                <div className="hiw-step-subtitle">{step.subtitle}</div>
-                <p>{step.copy}</p>
+              <div className="card-base group hover:border-z-violet-base/30 min-h-[240px] flex flex-col" key={step.title}>
+                <div className="absolute top-0 right-0 p-4 text-6xl font-display font-black italic text-white/[0.03] group-hover:text-z-violet-base/10 transition-colors duration-500 select-none">
+                  0{index + 1}
+                </div>
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-display font-bold italic text-white mb-2 group-hover:text-z-violet-peak transition-colors">{step.title}</h3>
+                  <div className="text-xs font-mono text-z-violet-base uppercase tracking-widest mb-4">{step.subtitle}</div>
+                  <p className="text-z-text-secondary leading-relaxed text-sm">{step.copy}</p>
+                </div>
+                <div className="mt-auto pt-6">
+                   <div className="w-full h-px bg-gradient-to-r from-z-violet-base/0 via-z-violet-base/50 to-z-violet-base/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                </div>
               </div>
             ))}
           </div>
@@ -108,14 +165,15 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Platform Section */}
-      <section className="platform-section">
-        <div className="platform-inner">
-          <div className="platform-header">
-            <p>WHY NEXIL</p>
-            <h2>The Platform</h2>
-            <span>Infrastructure built for escrowed wagers, telemetry, and instant releases.</span>
+      <section className="py-24 relative">
+        <div className="container-fluid max-w-6xl">
+          <div className="text-center mb-16">
+            <p className="text-sm font-mono text-z-violet-base tracking-widest mb-2">WHY NEXIL</p>
+            <h2 className="heading-section mb-4">The Platform</h2>
+            <span className="text-z-text-secondary block max-w-xl mx-auto">Infrastructure built for escrowed wagers, telemetry, and instant releases.</span>
           </div>
-          <div className="platform-grid">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: 'Escrow System',
@@ -136,13 +194,13 @@ export const Home: React.FC = () => {
                 copy: 'Tier-based matchmaking and ranked economy features are planned for future releases. Current tournaments operate without tier restrictions.',
               },
             ].map((block) => (
-              <div className="platform-card" key={block.title}>
-                <div className="platform-card-title">{block.title}</div>
-                <div className="platform-metric">
-                  <span>{block.metric}</span>
-                  <small>{block.metricLabel}</small>
+              <div className="card-glass group hover:-translate-y-2 transition-transform duration-500" key={block.title}>
+                <h3 className="text-xl font-display font-bold uppercase italic tracking-widest text-white mb-6 group-hover:text-z-violet-peak transition-colors">{block.title}</h3>
+                <div className="flex items-baseline gap-3 mb-6">
+                  <span className="text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">{block.metric}</span>
+                  <small className="text-xs font-mono text-z-violet-base uppercase tracking-widest">{block.metricLabel}</small>
                 </div>
-                <p>{block.copy}</p>
+                <p className="text-z-text-secondary text-sm leading-relaxed">{block.copy}</p>
               </div>
             ))}
           </div>
@@ -150,14 +208,15 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Tokenomics Section */}
-      <section className="platform-section" style={{ background: 'linear-gradient(180deg, #020202 0%, #0a0a0a 100%)', borderTop: 'none' }}>
-        <div className="platform-inner">
-          <div className="platform-header">
-            <p>$NEXIL UTILITY</p>
-            <h2>The Fuel</h2>
-            <span>Powering the ecosystem with discounts, rewards, and governance.</span>
+      <section className="py-24 relative bg-gradient-to-b from-z-bg to-black border-t border-white/5">
+        <div className="container-fluid max-w-6xl">
+          <div className="text-center mb-16">
+            <p className="text-sm font-mono text-z-violet-base tracking-widest mb-2">$NEXIL UTILITY</p>
+            <h2 className="heading-section mb-4">The Fuel</h2>
+            <span className="text-z-text-secondary block max-w-xl mx-auto">Powering the ecosystem with discounts, rewards, and governance.</span>
           </div>
-          <div className="platform-grid">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 title: 'Fee Discounts',
@@ -184,13 +243,13 @@ export const Home: React.FC = () => {
                 copy: 'Earn $NEXIL through activity and challenges. Top performers receive rakeback from platform volume.',
               },
             ].map((block) => (
-              <div className="platform-card" key={block.title} style={{ borderColor: 'rgba(180, 108, 255, 0.15)' }}>
-                <div className="platform-card-title" style={{ color: '#fff' }}>{block.title}</div>
-                <div className="platform-metric">
-                  <span style={{ color: '#b46cff', textShadow: '0 0 10px rgba(180,108,255,0.3)' }}>{block.metric}</span>
-                  <small style={{ color: 'rgba(255,255,255,0.5)' }}>{block.metricLabel}</small>
+              <div className="card-base border-z-violet-base/10 hover:border-z-violet-base/30 bg-gradient-to-br from-z-card to-z-bg hover:from-z-card hover:to-z-violet-base/5" key={block.title}>
+                <h3 className="text-lg font-display font-bold text-white mb-4">{block.title}</h3>
+                <div className="mb-4">
+                  <span className="text-2xl font-bold text-z-violet-peak block mb-1">{block.metric}</span>
+                  <small className="text-[10px] font-mono text-z-text-muted uppercase tracking-widest">{block.metricLabel}</small>
                 </div>
-                <p>{block.copy}</p>
+                <p className="text-z-text-muted text-sm leading-relaxed group-hover:text-z-text-secondary transition-colors">{block.copy}</p>
               </div>
             ))}
           </div>

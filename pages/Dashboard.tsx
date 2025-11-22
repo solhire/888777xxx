@@ -175,9 +175,9 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
                   <div className="text-xl font-display font-bold text-z-violet-peak">{reward.amountSol} SOL</div>
-                  <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
+                    <span className="text-z-steel-gray font-mono text-xs uppercase border border-z-steel-gray/30 px-3 py-2 select-none">
                     {reward.status === 'claimed' ? 'CLAIMED' : 'PENDING'}
-                  </span>
+                    </span>
                 </div>
               </div>
             ))}

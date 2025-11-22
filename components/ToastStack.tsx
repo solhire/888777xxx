@@ -2,26 +2,27 @@ import React from 'react';
 import { useToast } from '../context/ToastContext';
 
 const variantStyles = {
-  success: 'border-green-400 text-green-200',
-  info: 'border-z-violet-base text-white',
-  error: 'border-z-violet-peak/50 text-white bg-gradient-to-r from-z-violet-base/20 to-z-violet-peak/20 shadow-[0_0_20px_rgba(180,108,255,0.4)]',
+  success: 'border-green-500/50 text-green-100 bg-green-900/20',
+  info: 'border-z-violet-base/50 text-white bg-z-violet-base/10',
+  error: 'border-red-500/50 text-red-100 bg-red-900/20',
 };
 
 export const ToastStack: React.FC = () => {
   const { toasts, removeToast } = useToast();
 
   return (
-    <div className="fixed bottom-24 left-4 z-50 space-y-3 max-w-sm">
+    <div className="fixed bottom-24 left-4 z-[100] space-y-3 max-w-sm w-full">
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`bg-black/90 border px-4 py-3 text-sm font-mono shadow-lg animate-fade-in ${variantStyles[toast.variant]}`}
+          className={`backdrop-blur-md border px-6 py-4 text-sm font-mono shadow-2xl animate-fade-in rounded-lg relative overflow-hidden ${variantStyles[toast.variant]}`}
         >
+          <div className="absolute left-0 top-0 h-full w-1 bg-current opacity-50" />
           <div className="flex items-start justify-between gap-4">
-            <span>{toast.message}</span>
+            <span className="font-medium tracking-wide">{toast.message}</span>
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-xs text-z-steel-gray hover:text-white transition-colors"
+              className="text-xs opacity-50 hover:opacity-100 transition-opacity -mt-1 -mr-2 p-2"
             >
               ✕
             </button>
@@ -31,4 +32,3 @@ export const ToastStack: React.FC = () => {
     </div>
   );
 };
-
