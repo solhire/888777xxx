@@ -104,6 +104,7 @@ export const Navbar: React.FC = () => {
               <NavLink to="/tournaments" label="Tournaments" active={location.pathname.startsWith('/tournaments') || location.pathname === '/compete'} />
               <NavLink to="/leaderboards" label="Leaderboards" active={location.pathname === '/leaderboards'} />
               <NavLink to="/vote" label="Vote" active={location.pathname === '/vote'} />
+              <NavLink to="/minigames" label="Minigames" active={location.pathname === '/minigames'} />
               <NavLink to="/faq" label="FAQ" active={location.pathname === '/faq'} />
               <NavLink to="/dashboard" label="Dashboard" active={location.pathname === '/dashboard'} />
             </div>
@@ -222,7 +223,7 @@ export const Navbar: React.FC = () => {
                <button onClick={() => setMobileOpen(false)} className="text-z-text-muted hover:text-white font-display text-xl">CLOSE [X]</button>
             </div>
             <div className="flex flex-col gap-6 mt-8">
-               {['Tournaments', 'Leaderboards', 'Vote', 'FAQ', 'Dashboard', 'Profile'].map((item) => (
+               {['Tournaments', 'Leaderboards', 'Vote', 'Minigames', 'FAQ', 'Dashboard', 'Profile'].map((item) => (
                  <Link 
                    key={item}
                    to={`/${item.toLowerCase()}`} 

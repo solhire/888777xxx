@@ -17,6 +17,7 @@ import { FAQ } from './pages/FAQ';
 import { Profile } from './pages/Profile';
 import { Admin } from './pages/Admin';
 import { Vote } from './pages/Vote';
+import { Minigames } from './pages/Minigames';
 import { Settings } from './pages/Settings';
 import { Referrals } from './pages/Referrals';
 import { AdminProvider } from './context/AdminContext';
@@ -61,6 +62,7 @@ const App: React.FC = () => {
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/vote" element={<Vote />} />
+              <Route path="/minigames" element={<Minigames />} />
             </Routes>
           </main>
           
