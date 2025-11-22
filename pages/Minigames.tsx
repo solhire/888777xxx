@@ -15,7 +15,7 @@ export const Minigames: React.FC = () => {
                             <h2 className="text-z-violet-peak font-display font-bold text-xl italic">TRAINING PROTOCOLS ONLINE</h2>
                         </div>
                         <p className="text-z-steel-gray font-mono text-sm max-w-xl">
-                            Current module: <span className="text-white">Neuro-Aim v1.0</span>. Additional simulation modules and <span className="text-z-cyan">SOL rewards</span> coming soon.
+                            Current module: <span className="text-white">Neuro-Aim v1.0</span>. More minigames for <span className="text-z-cyan">SOL rewards</span> coming soon.
                         </p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -23,10 +23,9 @@ export const Minigames: React.FC = () => {
                            <div className="text-[10px] text-z-steel-gray font-mono uppercase tracking-widest">STATUS</div>
                            <div className="text-green-400 font-bold text-sm flex items-center justify-end gap-2">
                                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]"></span>
-                               OPERATIONAL
+                               ONLINE
                            </div>
                        </div>
-                    </div>
                 </div>
             </div>
         </div>

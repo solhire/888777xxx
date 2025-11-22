@@ -153,10 +153,10 @@ export const AimTrainer: React.FC = () => {
                     NEURO<span className="text-z-cyan">AIM</span>
                 </h2>
                 <p className="text-z-text-secondary font-mono mb-8 text-center max-w-md">
-                    Test your synaptic response time. Chain hits for combo multipliers. Gold targets grant bonus points.
+                    Test your reflexes. Chain hits for combos. Gold targets grant bonus points.
                 </p>
                 <Button onClick={startGame} size="lg" className="min-w-[200px] shadow-[0_0_30px_rgba(34,211,238,0.3)] border-z-cyan/50 hover:bg-z-cyan hover:text-black">
-                    {score > 0 ? 'RE-INITIALIZE' : 'INITIATE SEQUENCE'}
+                    {score > 0 ? 'PLAY AGAIN' : 'START GAME'}
                 </Button>
                 
                 {score > 0 && (
